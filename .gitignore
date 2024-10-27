@@ -10,3 +10,13 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+
+
+*.pyc
+*/*.pyc
+*/*/*.pyc
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+venv
