@@ -334,12 +334,12 @@
                                 </select>
                             </div>
                             <div class="col-3 ci">
-                                Mobile No
-                                <input type="text" name="mobile" class="form-control" placeholder="Mobile No" required>
+                                Номер телефона
+                                <input type="text" name="mobile" class="form-control" placeholder="Номер телефона" required>
                             </div>
                             <div class="col-6 ci">
-                                Email
-                                <input type="email" name="email" class="form-control" placeholder="Email" required>
+                                E-mail
+                                <input type="email" name="email" class="form-control" placeholder="E-mail" required>
                             </div>
                         </div>
                     </div>
@@ -350,8 +350,8 @@
                 </div>
                 <div class="traveller-details individual-traveller-div">
                     <div class="traveller-head">
-                        <h5>Passenger Details</h5>
-                        <h6><span>0</span> Passengers</h6>
+                        <h5>Выбор места</h5>
+                        <h6><span>0</span> Пассажиров</h6>
                     </div>
                     <hr>
                     <input type="hidden" id="p-count" name="passengersCount" value="0">
@@ -360,44 +360,44 @@
                     <div class="row each-traveller no-traveller">
                         <div>
                             <span class="traveller-name"></span>
-                            You have not added any adults to the list
+                            Вы не добавили ни одного пассажира
                         </div>
                     </div>
                     <div class="row add-traveller-div collapse" id="collapseExample">
-                        <div class="note-name"><span>IMPORTANT :</span> Enter your name as it is mentioned on your passport or any government approved ID.</div>
+                        <div class="note-name"><span>ВАЖНО:</span> Введите свои имя, фамилию и отчество так, как они указаны в Вашем паспорте</div>
                         <div class="row form-group add-traveller-div-name">
                             <div class="col">
-                                <input type="text" class="form-control" id="fname" placeholder="First name">
+                                <input type="text" class="form-control" id="fname" placeholder="Имя">
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" id="lname" placeholder="Last name">
+                                <input type="text" class="form-control" id="lname" placeholder="Фамилия">
                             </div>
                         </div>
                         
                         <div class="row form-group radio-div">
                             <div class="form-check-inline cd">
-                                Gender: 
+                                Пол: 
                             </div>
                             <div class="form-check-inline">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input gender" value="male">Male
+                                    <input type="radio" class="form-check-input gender" value="male">Муж
                                 </label>
                             </div>
                             <div class="form-check-inline">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input gender" value="female">Female
+                                    <input type="radio" class="form-check-input gender" value="female">Жен
                                 </label>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary btn-light" style="margin-right: auto;" onclick="add_traveller()">Add</button>
+                        <button type="button" class="btn btn-primary btn-light" style="margin-right: auto;" onclick="add_traveller()">Добавить пассажира</button>
                     </div>
                     <hr>
                     <div class="add-traveller">
-                        <button class="add-traveller-btn text-uppercase btn"  type="button" data-toggle="collapse" data-target="#collapseExample">+ ADD ADULT</button>
+                        <button class="add-traveller-btn text-uppercase btn"  type="button" data-toggle="collapse" data-target="#collapseExample">+ Новый пассажир</button>
                     </div>
                 </div>
                 <div class="payment-btn" style="background-color: transparent;">
-                    <button type="submit" class="btn btn-primary btn-danger">Proceed to payment</button>
+                    <button type="submit" class="btn btn-primary btn-danger">Перейти к бронированию</button>
                 </div>
                 </div>
                 <div class="col-4">
