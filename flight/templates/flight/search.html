@@ -1,3 +1,6 @@
+
+
+
 {% extends 'flight/layout.html' %}
 
 {% load static %}
@@ -39,7 +42,7 @@
                 <div class="v-line"></div>
                 <div class="trip-time">
                     <div class="depart-date-div">
-                        <div class="small-label">Depart</div>
+                        <div class="small-label">Дата</div>
                         <div class="white">{{depart_date|date:"D, d M Y"}}</div>
                     </div>
                     <!-- <div class="return-date-div">
@@ -307,7 +310,7 @@
                         </div>
                         <div class="col-lg-9 actual-result-div">
                             <div class="sort-div" style="display:none">
-                                <div class="sort-label">Sort By:</div>
+                                <div class="sort-label">Компания</div>
                                 <div style="display: flex;">
                                     <div class="sort-depart">
                                         Depart
@@ -324,27 +327,27 @@
                                 </div>
                             </div>
 
-
+<!-- ура -->
                             {% if flights %}
                                 <div class="sort-div">
                                 <div class="flight-company">
-                                    <div class="sort-label">Sort By:</div>
+                                    <div class="sort-label">Компания</div>
                                 </div>
                                 <div class="flight-time">
                                     <div class="flight-origin-time sort-depart">
-                                        Depart
+                                        Вылет
                                         <span></span>
                                     </div>
                                     <div class="flight-stops"></div>
                                     <div class="flight-destination-time sort-arrive">
-                                        Arrive
+                                        Посадка
                                         <span></span>
                                     </div>
                                 </div>
                                 <div class="flight-details">
-                                    Price
-                                    <span><!--&#8593;--><!--&#8595;--></span>
+                                    <button id="sort-price-true" class="sortableyea">Цена↓</button>
                                 </div>
+                                
                             </div>
                             {% endif %}
 
@@ -593,7 +596,7 @@
                             </div>
                             <div class="col-lg-9 actual-result-div">
                                 <div class="sort-div" style="display:none">
-                                    <div class="sort-label">Sort By:</div>
+                                    <div class="sort-label">Компания</div>
                                     <div style="display: flex;">
                                         <div class="sort-depart">
                                             Depart
@@ -614,7 +617,7 @@
                                 {% if flights2 %}
                                     <div class="sort-div">
                                     <div class="flight-company">
-                                        <div class="sort-label">Sort By:</div>
+                                        <div class="sort-label">Компания</div>
                                     </div>
                                     <div class="flight-time">
                                         <div class="flight-origin-time sort-depart">
@@ -627,8 +630,9 @@
                                             <span></span>
                                         </div>
                                     </div>
-                                    <div class="flight-details">
-                                        Price
+                                    <div class="flight-details" style="cursor: pointer;">
+                                        <span id="sortable" class="sortable" style="cursor: pointer;" onclick="toggleSort()">Price↓</span>
+
                                         <span><!--&#8593;--><!--&#8595;--></span>
                                     </div>
                                 </div>
@@ -887,4 +891,52 @@
             </div>
         {% endif %}
     </section>
+
+    
+
+
+
+
+    <script>
+        let currentSortOrder = 'asc'; // Default to ascending
+    
+        function sortFlights(order) {
+            const flightsDiv = document.getElementById('flights_div');
+            const flights = Array.from(flightsDiv.children);
+            
+            // Sort based on the selected order
+            flights.sort((a, b) => {
+                const priceA = parseFloat(a.querySelector('.flight-price span').textContent.trim());
+                const priceB = parseFloat(b.querySelector('.flight-price span').textContent.trim());
+                return order === 'asc' ? priceA - priceB : priceB - priceA;
+            });
+    
+            // Append the sorted flights back to the flightsDiv
+            flights.forEach(flight => flightsDiv.appendChild(flight));
+        }
+    
+        const sortPriceButton = document.getElementById('sort-price-true');
+    
+        sortPriceButton.addEventListener('click', function() {
+            if (currentSortOrder === 'asc') {
+                currentSortOrder = 'desc'; // Change to descending
+                this.textContent = 'Цена↑'; // Update text
+            } else {
+                currentSortOrder = 'asc'; // Change to ascending
+                this.textContent = 'Цена↓'; // Update text
+            }
+            sortFlights(currentSortOrder);
+        });
+    
+        // Call sortFlights on page load to initialize
+        sortFlights(currentSortOrder);
+    </script>
+    
+    
+    
+    
+
+
 {% endblock %}
+
+
