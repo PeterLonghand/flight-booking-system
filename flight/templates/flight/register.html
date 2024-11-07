@@ -15,44 +15,47 @@
         <div>
             <center>
                 <a href="{% url 'index' %}"><img src="{% static 'img/icon_logo.png' %}" height="35em" style="margin-bottom: 2vh;"> </a>
-                <h3>Зарегистрироваться на Flight</h2><br>
+                <h3>Зарегистрироваться на Flight</h3><br>
             </center>
         </div>
     
-        <form action="{% url 'register' %}" method="post" id="signin-form" style="width: 100%;margin-bottom: 5vh;"  enctype="multipart/form-data">
+        <form action="{% url 'register' %}" method="post" id="signin-form" style="width: 100%; margin-bottom: 5vh;" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                <div class="form-row align-items-center">
-                <div class="col-sm-6 my-1">
-                    <input class="form-control inp fname" type="text" name="firstname" placeholder="Имя *" autocomplete="off" autofocus>
-                    <span class="star small"></span>
-                </div>
-                <div class="col-sm-6 my-1">
-                    <input class="form-control inp lname" type="text" name="lastname" placeholder="Фамилия *" autocomplete="off">
-                    <span class="star small"></span>
-                </div>
-            </div>
-            </div>
-            <div class="form-group">
-                <input class="form-control inp usrname" type="text" name="username" placeholder="Логин *" autocomplete="off">
-                <span class="star small">{{message}}</span>
-            </div>
-            <div class="form-group">
-                <input class="form-control inp email" type="email" name="email" placeholder="Эл. почта *" autocomplete="off">
+                <input class="form-control inp usrname" type="text" name="username" placeholder="Логин *" minlength="4" maxlength="36" required>
                 <span class="star small"></span>
             </div>
             <div class="form-group">
-                <input class="form-control inp pswd" type="password" name="password" placeholder="Пароль *" autocomplete="off">
+                <input class="form-control inp fname" type="text" name="firstname" placeholder="Имя *" minlength="2" maxlength="36" required>
                 <span class="star small"></span>
             </div>
             <div class="form-group">
-                <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Повтор пароля *" autocomplete="off">
+                <input class="form-control inp lname" type="text" name="lastname" placeholder="Фамилия *" minlength="2" maxlength="36" required>
                 <span class="star small"></span>
             </div>
-
+            <div class="form-group">
+                <input class="form-control inp patronymic" type="text" name="patronymic" placeholder="Отчество" minlength="3" maxlength="36">
+                <span class="star small"></span>
+            </div>
+            <div class="form-group">
+                <input class="form-control inp phonenumber" type="text" name="phonenumber" placeholder="Номер телефона *" minlength="7" maxlength="18" required>
+                <span class="star small"></span>
+            </div>
+            <div class="form-group">
+                <input class="form-control inp email" type="email" name="email" placeholder="Эл. почта *" minlength="5" maxlength="64" required>
+                <span class="star small"></span>
+            </div>
+            <div class="form-group">
+                <input class="form-control inp pswd" type="password" name="password" placeholder="Пароль *" minlength="4" maxlength="16" required>
+                <span class="star small"></span>
+            </div>
+            <div class="form-group">
+                <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Повтор пароля *" required>
+                <span class="star small"></span>
+            </div>
 
             <center>
-                <input class="btn btn-danger" type="submit" value="Зарегистрироваться" style="margin-top: 10px; width: 95%;" disabled>
+                <input class="btn btn-danger" type="submit" value="Зарегистрироваться" style="margin-top: 10px; width: 95%;">
             </center>
         </form>
     

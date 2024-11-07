@@ -1,13 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinLengthValidator, RegexValidator
 
 from datetime import datetime
 
 # Create your models here.
-
 class User(AbstractUser):
+    username = models.CharField(
+        max_length=36,
+        unique=True,
+        null=False,
+        validators=[MinLengthValidator(4)]
+    )
+    firstname = models.CharField(max_length=36, null=False, validators=[MinLengthValidator(2)],default="DefaultFirstName")
+    surname = models.CharField(max_length=36, null=False, validators=[MinLengthValidator(2)],default="DefaultSurname")
+    patronymic = models.CharField(max_length=36, blank=True, validators=[MinLengthValidator(3)])
+    phonenumber = models.CharField(
+        max_length=18,
+        null=False,
+        validators=[
+            MinLengthValidator(7),
+            RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')
+        ], default="00000000000"
+    )
+    email = models.EmailField(max_length=64, unique=True, null=False)
+    password = models.CharField(max_length=16, null=False, validators=[MinLengthValidator(4)])
+
     def __str__(self):
-        return f"{self.id}: {self.first_name} {self.last_name}"
+        return f"{self.id}: {self.username} ({self.name} {self.surname})"
 
 class Place(models.Model):
     city = models.CharField(max_length=64)
@@ -53,6 +73,7 @@ GENDER = (
 class Passenger(models.Model):
     first_name = models.CharField(max_length=64, blank=True)
     last_name = models.CharField(max_length=64, blank=True)
+
     gender = models.CharField(max_length=20, choices=GENDER, blank=True)
     #passenger = models.ForeignKey(User, on_delete=models.CASCADE, related_name="flights")
     #flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="passengers")
