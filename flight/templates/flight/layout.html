@@ -36,6 +36,12 @@
           <li class="nav-item {% if page == 'bookings' %}active{% endif %}">
             <a class="nav-link" href="{% url 'bookings' %}">Мои бронирования</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about_system' %}">О системе</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about_devs' %}">О разработчиках</a>
+          </li>
         </ul>
         <ul class="navbar-nav">
           {% if not user.is_authenticated %}

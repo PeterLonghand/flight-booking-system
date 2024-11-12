@@ -471,3 +471,9 @@ def terms_and_conditions(request):
 
 def about_us(request):
     return render(request, 'flight/about.html')
+
+def about_system(request):
+    return render(request, 'flight/about_system.html')
+
+def about_devs(request):
+    return render(request, 'flight/about_devs.html')

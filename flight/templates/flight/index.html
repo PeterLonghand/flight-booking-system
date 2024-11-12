@@ -18,9 +18,10 @@
             <div class="container">
             <form class="search-flight-form" action="{% url 'flight' %}" onsubmit="return flight_search()">
                 <div class="align-items-center">
+                    <input type="hidden" name="TripType" value="1">
                     <div class="search-flight-form-data">
                         <div class="input-row" style="display: flex;">
-                        <div class="form-check-inline">
+                        <!-- <div class="form-check-inline">
                             <label class="form-check-label">
                             <input type="radio" class="form-check-input trip-type" id="one-way" name="TripType" value="1" checked>Туда
                             </label>
@@ -29,7 +30,7 @@
                             <label class="form-check-label">
                             <input type="radio" class="form-check-input trip-type" id="round-trip" name="TripType" value="2" {% if trip_type == '2' %}checked{% endif %}>Туда и обратно
                             </label>
-                        </div>
+                        </div> -->
                         </div>
                         <div class="input-row">
                             <label for="flight-from">Пункт отправления: </label>
@@ -69,7 +70,7 @@
                             <label for="seat_class">Класс обслуживания: </label>
                             <select name="SeatClass" id="SeatType" class="form-control mr-sm-2 selectpicker">
                                 <option value="economy" {% if seat == 'economy' %}selected{% endif %}>Эконом</option>
-                                <option value="business" {% if seat == 'business' %}selected{% endif %}>Бизнесс</option>
+                                <option value="business" {% if seat == 'business' %}selected{% endif %}>Бизнес</option>
                                 <option value="first" {% if seat == 'first' %}selected{% endif %}>First</option>
                             </select>
                         </div>
