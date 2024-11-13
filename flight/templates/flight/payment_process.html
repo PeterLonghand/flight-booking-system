@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block head %}
-    <title>Payment Processing | Flight</title>
+    <title>Процесс Бронирования | На Взлёт!</title>
     <link rel="stylesheet" href="{% static 'css/payment_process_style.css' %}">
     <script type="text/javascript" src="{% static 'js/payment_process.js' %}"></script>
 {% endblock %}
@@ -14,10 +14,10 @@
             <img src="{% static 'img/process.gif' %}" alt="processing">
         </div>
         <div class="header-before">
-            Processing Payment...
+            Обрабатываем Ваше бронирование...
         </div>
         <div class="below-header">
-            Please wait while we are processing your payment.
+            Пожалуйста, подождите, пока мы обрабатываем Ваше бронирование.
         </div>
     </section>
     <input type="hidden" class="ref1" value="{{ticket1.ref_no}}">
@@ -29,7 +29,7 @@
             </svg>
         </div>
         <div class="header-after">
-            Congratulations, Your flight booking is confirmed.
+            Поздравляем! Бронь подтверждена.
         </div>
         <div class="details-div">
             <div class="flight1">Booking Ref. Number: &nbsp;<span class="ref">{{ticket1.ref_no}}</span>&nbsp;&nbsp;&nbsp;(<span class="from1">{{ticket1.flight.origin.code}}</span> <span>&#8594;</span> <span class="to1">{{ticket1.flight.destination.code}}</span>)</div>

@@ -1,0 +1,11 @@
+.about-developers {
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.6;
+  padding: 20px;
+  color: black;
+}
+
+.about-developers p {
+  margin: 5px 0;
+}
