@@ -6,6 +6,12 @@ from datetime import datetime
 
 # Create your models here.
 class User(AbstractUser):
+
+# Отключаем стандартные поля
+    first_name = None
+    last_name = None
+
+
     username = models.CharField(
         max_length=36,
         unique=True,
@@ -27,7 +33,7 @@ class User(AbstractUser):
     password = models.CharField(max_length=16, null=False, validators=[MinLengthValidator(4)])
 
     def __str__(self):
-        return f"{self.id}: {self.username} ({self.name} {self.surname})"
+        return f"{self.id}: {self.username} ({self.firstname} {self.surname})"
 
 class Place(models.Model):
     city = models.CharField(max_length=64)

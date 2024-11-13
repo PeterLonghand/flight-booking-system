@@ -22,19 +22,19 @@
         <form action="{% url 'register' %}" method="post" id="signin-form" style="width: 100%; margin-bottom: 5vh;" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                <input class="form-control inp usrname" type="text" name="username" placeholder="Логин *" minlength="4" maxlength="36" required>
+                <input class="form-control inp firstname" type="text" name="firstname" placeholder="Имя *" minlength="2" maxlength="36" required>
                 <span class="star small"></span>
             </div>
             <div class="form-group">
-                <input class="form-control inp fname" type="text" name="firstname" placeholder="Имя *" minlength="2" maxlength="36" required>
-                <span class="star small"></span>
-            </div>
-            <div class="form-group">
-                <input class="form-control inp lname" type="text" name="lastname" placeholder="Фамилия *" minlength="2" maxlength="36" required>
+                <input class="form-control inp lastname" type="text" name="lastname" placeholder="Фамилия *" minlength="2" maxlength="36"  required>
                 <span class="star small"></span>
             </div>
             <div class="form-group">
                 <input class="form-control inp patronymic" type="text" name="patronymic" placeholder="Отчество" minlength="3" maxlength="36">
+                <span class="star small"></span>
+            </div>
+            <div class="form-group">
+                <input class="form-control inp username" type="text"  name="username" placeholder="Логин *" minlength="4" maxlength="36" required>
                 <span class="star small"></span>
             </div>
             <div class="form-group">

@@ -65,8 +65,42 @@ def index(request):
             'min_date': min_date,
             'max_date': max_date
         })
+    
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.urls import reverse
 
 def login_view(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        
+        # аутентифицируем
+        user = authenticate(request, username=username, password=password)
+        
+        # если уже существует
+        if user is not None:
+            login(request, user)
+            
+            # проверка является ли пользователь суперюзером. если да - перенаправляем на админку
+            if user.is_superuser:
+                return redirect('/admin/')
+            
+            # перенаправление на домашнюю страницу для обычного пользователя
+            return HttpResponseRedirect(reverse("index"))
+        
+        # Если учетные данные неверны
+        else:
+            return render(request, "flight/login.html", {
+                "message": "Неправильный логин или пароль."
+            })
+    else:
+        return render(request, "flight/login.html")
+
+
+
+
+""" def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -84,13 +118,15 @@ def login_view(request):
             return HttpResponseRedirect(reverse('index'))
         else:
             return render(request, "flight/login.html")
-
+ """
 def register_view(request):
     if request.method == "POST":
         fname = request.POST['firstname']
         lname = request.POST['lastname']
         username = request.POST["username"]
         email = request.POST["email"]
+        patronymic = request.POST.get("patronymic", "")
+        phonenumber = request.POST["phonenumber"]
 
         # Ensuring password matches confirmation
         password = request.POST["password"]
@@ -103,8 +139,10 @@ def register_view(request):
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
-            user.first_name = fname
-            user.last_name = lname
+            user.firstname = fname  # custom field
+            user.surname = lname    # custom field
+            user.patronymic = patronymic
+            user.phonenumber = phonenumber
             user.save()
         except:
             return render(request, "flight/register.html", {
