@@ -18,15 +18,66 @@
                 <h3>Зарегистрироваться На Взлёт!</h3><br>
             </center>
         </div>
-    
+
         <form action="{% url 'register' %}" method="post" id="signin-form" style="width: 100%; margin-bottom: 5vh;" enctype="multipart/form-data">
+            {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control inp firstname" type="text" name="firstname" placeholder="Имя *" minlength="2" maxlength="36" required>
+            <span class="star small"></span>
+            <span class="error-message" style="color: red; display: none;">Имя должно содержать от 2 до 36 символов и может включать латиницу и кириллицу.</span>
+        </div>
+        
+        <div class="form-group">
+            <input class="form-control inp lastname" type="text" name="lastname" placeholder="Фамилия *" minlength="2" maxlength="36" required>
+            <span class="star small"></span>
+            <span class="error-message" style="color: red; display: none;">Фамилия должна содержать от 2 до 36 символов и может включать латиницу и кириллицу.</span>
+        </div>
+        
+        <div class="form-group">
+            <input class="form-control inp patronymic" type="text" name="patronymic" placeholder="Отчество" minlength="3" maxlength="36">
+            <span class="star small"></span>
+            <span class="error-message" style="color: red; display: none;">Отчество должно содержать от 3 до 36 символов и может включать латиницу и кириллицу.</span>
+        </div>
+        
+        <div class="form-group">
+            <input class="form-control inp username" type="text" name="username" placeholder="Логин *" minlength="4" maxlength="36" required>
+            <span class="star small"></span>
+            <span class="error-message" style="color: red; display: none;">Логин должен содержать от 4 до 36 символов, включая латиницу, кириллицу, цифры и знак нижнего подчеркивания.</span>
+        </div>
+        
+        <div class="form-group">
+            <input class="form-control inp phonenumber" type="text" name="phonenumber" placeholder="Номер телефона *" minlength="7" maxlength="18" required>
+            <span class="star small"></span>
+            <span class="error-message" style="color: red; display: none;">Номер телефона должен содержать от 7 до 18 символов и включать цифры и знак плюса.</span>
+        </div>
+        
+        <div class="form-group">
+            <input class="form-control inp email" type="email" name="email" placeholder="Эл. почта *" minlength="5" maxlength="64" required>
+            <span class="star small"></span>
+            <span class="error-message" style="color: red; display: none;">Введите корректный адрес электронной почты.</span>
+        </div>
+        
+        <div class="form-group">
+            <input class="form-control inp pswd" type="password" name="password" placeholder="Пароль *" minlength="4" maxlength="16" required>
+            <span class="star small"></span>
+            <span class="error-message" style="color: red; display: none;">Пароль должен содержать от 4 до 16 символов.</span>
+        </div>
+        
+        <div class="form-group">
+            <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Повтор пароля *" required>
+            <span class="star small"></span>
+            <span class="error-message" style="color: red; display: none;">Пароли должны совпадать.</span>
+        </div>
+
+    
+        <!-- <form action="{% url 'register' %}" method="post" id="signin-form" style="width: 100%; margin-bottom: 5vh;" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <input class="form-control inp firstname" type="text" name="firstname" placeholder="Имя *" minlength="2" maxlength="36" required>
                 <span class="star small"></span>
             </div>
             <div class="form-group">
-                <input class="form-control inp lastname" type="text" name="lastname" placeholder="Фамилия *" minlength="2" maxlength="36"  required>
+                <input class="form-control inp lastname" type="text" name="lastname" placeholder="Фамилия *" minlength="2" maxlength="36"   required>
                 <span class="star small"></span>
             </div>
             <div class="form-group">
@@ -52,7 +103,7 @@
             <div class="form-group">
                 <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Повтор пароля *" required>
                 <span class="star small"></span>
-            </div>
+            </div> -->
 
             <center>
                 <input class="btn btn-danger" type="submit" value="Зарегистрироваться" style="margin-top: 10px; width: 95%;">

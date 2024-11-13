@@ -3,74 +3,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
     <link rel="icon" type="image/ico" href="/static/img/favicon.ico">
     <title>e-Ticket</title>
     <style>
-        @page{
+        
+        @page {
             margin: 37px 50px;
         }
-        *{
+        @font-face {
+        font-family: 'Roboto-Regular';
+        src: url('file:///D:/flight-booking-system/flight/Roboto-Regular.ttf');
+        }
+    
+        * {
             padding: 0;
             margin: 0;
-            font-family: sans-serif;
+            /* font-family:'Roboto', sans-serif;
+ */
         }
-        body{
+    
+        body {
+            font-family: 'Roboto-Regular', sans-serif;
             padding: 7% 7%;
         }
-        nav{
+    
+        nav {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
         }
-        .logo{
+    
+        .logo {
             display: flex;
         }
-        .header{
+    
+        .header {
             text-align: right;
             font-size: 2em;
             font-weight: 600;
         }
-        li{
+    
+        li {
             margin-top: 5px;
             margin-bottom: 5px;
         }
-        .col{
-            -ms-flex-preferred-size:0;
-            flex-basis:0;
-            -ms-flex-positive:1;
-            flex-grow:1;
-            max-width:100%
+    
+        .col {
+            -ms-flex-preferred-size: 0;
+            flex-basis: 0;
+            -ms-flex-positive: 1;
+            flex-grow: 1;
+            max-width: 100%;
         }
-        table{
+    
+        table {
             margin-top: 0;
             width: 100%;
         }
-        .table{
+    
+        .table {
             margin-top: 25px;
         }
-        tr{
+    
+        tr {
             width: 100%;
         }
-        th{
+    
+        th {
             width: 25%;
             text-align: left;
             padding: 5px 20px;
         }
-        td{
+    
+        td {
             width: 25%;
             text-align: left;
             padding: 5px 15px;
         }
-        caption{
+    
+        caption {
             text-align: left;
             background-color: #a9a9a9;
             color: white;
             padding: 8px 15px;
             font-weight: bold;
         }
-        .tr-caption{
+    
+        .tr-caption {
             text-align: left;
             background-color: #a9a9a9;
             color: white;
@@ -79,13 +103,16 @@
             width: 100%;
             font-size: 1.4em;
         }
-        .tr-even{
+    
+        .tr-even {
             background-color: #f0f0f0;
         }
-        .tr-odd{
+    
+        .tr-odd {
             background-color: white;
         }
     </style>
+    
 </head>
 <body>
     <nav>
