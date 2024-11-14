@@ -58,8 +58,15 @@ function fetchPlaces(query, listSelector) {
   const list = document.querySelector(listSelector);
   const endpoint = query.length === 0 ? "all" : query;
 
+  console.log("Отправка запроса по адресу:", "/query/places/" + endpoint);
+
   fetch("/query/places/" + endpoint)
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Сервер вернул ошибку: " + response.status);
+      }
+      return response.json();
+    })
     .then((places) => {
       list.innerHTML = "";
       places.forEach((element) => {

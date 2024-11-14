@@ -47,14 +47,14 @@
                         </div> -->
                         
                         <div class="input-row">
-                            <label for="flight-from">Пункт отправления: </label>
+                            <label for="flight-from">Пункт отправления:</label>
                             <input type="text" name="Origin" placeholder="Из:" id="flight-from" 
                                    class="form-control mr-sm-3" 
-                                   onfocus="flight_from(event, true)" 
-                                   oninput="flight_from(event)" 
                                    onblur="hideplaces(this)" 
-                                   autocomplete="off">
-                            
+                                   data-value="{{origin | lower}}" 
+                                   data-list="places_from" 
+                                   autocomplete="off" 
+                                   value="{{origin | upper}}">
                             <div id="places_from" class="places_box"></div>
                         </div>
                         

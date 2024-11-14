@@ -12,7 +12,7 @@ function flight_duration2() {
     .querySelectorAll(".flight-stops2 .tooltiptext")
     .forEach((element) => {
       let time = element.dataset.value.split(":");
-      element.innerText = time[0] + "h " + time[1] + "m";
+      element.innerText = time[0] + "ч " + time[1] + "мин";
     });
 }
 

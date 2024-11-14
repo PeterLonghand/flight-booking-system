@@ -22,7 +22,7 @@ urlpatterns = [
     path('about-us', views.about_us, name="aboutus"),
     path('about_system', views.about_system, name="about_system"),
     #
-    path('query/places/<str:query>/', views.get_places, name='get_places'),
+    path("query/places/<str:query>/", views.get_places, name="get_places"),
     #
     path('about_devs', views.about_devs, name="about_devs")
 ]
