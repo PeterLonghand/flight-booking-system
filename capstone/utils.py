@@ -1,6 +1,12 @@
-from io import BytesIO
+from io import BytesIO, StringIO
 from django.http import HttpResponse
 from django.template.loader import get_template
+from xhtml2pdf.files import pisaFileObject
+
+
+from capstone import settings
+#from django.conf.urls.static import static
+
 
 from flight.models import *
 import secrets
@@ -8,8 +14,15 @@ from datetime import datetime, timedelta
 from xhtml2pdf import pisa
 
 from flight.constant import FEE
+import os
 
-def render_to_pdf(template_src, context_dict={}):
+""" def link_callback(uri, rel):
+    if uri.startswith('file:///'):
+        return uri[7:]  # Удаляем 'file://'
+    return uri """
+
+
+""" def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
     html  = template.render(context_dict)
 
@@ -23,7 +36,36 @@ def render_to_pdf(template_src, context_dict={}):
     pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None """
+
+pisaFileObject.getNamedFile = lambda self: self.uri
+def fetch_pdf_resources(uri, rel):
+    print(uri)
+    if uri.find(settings.MEDIA_URL) != -1:
+        path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ''))
+    elif uri.find(settings.STATIC_URL) != -1:
+        path = os.path.join(settings.STATIC_ROOT, uri.replace(settings.STATIC_URL, ''))
+    else:
+        path = None
+    #path = path.replace("/", "\\")
+    print (path)
+    return path
+
+def render_to_pdf(template_src, context_dict={}):
+    
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    #html.decode('UTF-8')
+
+    result = BytesIO()
+    
+    # Обеспечиваем поддержку указанных шрифтов
+    pdf = pisa.pisaDocument(BytesIO(html.encode('UTF-8')), result, encoding='utf-8', link_callback=fetch_pdf_resources )
+    #pdf = pisa.pisaDocument(StringIO(html.encode("UTF-8")), result, encoding='UTF-8')
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
+
 
 
 def createticket(user,passengers,passengerscount,flight1,flight_1date,flight_1class,coupon,countrycode,email,mobile):
