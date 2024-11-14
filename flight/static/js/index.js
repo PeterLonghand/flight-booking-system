@@ -54,6 +54,46 @@ function selectplace(option) {
   input.dataset.value = option.dataset.value;
 }
 
+function fetchPlaces(query, listSelector) {
+  const list = document.querySelector(listSelector);
+  const endpoint = query.length === 0 ? "all" : query;
+
+  fetch("/query/places/" + endpoint)
+    .then((response) => response.json())
+    .then((places) => {
+      list.innerHTML = "";
+      places.forEach((element) => {
+        let div = document.createElement("div");
+        div.classList.add("places__list");
+        div.setAttribute("onclick", "selectplace(this)");
+        div.setAttribute("data-value", element.code);
+        div.innerText = `${element.city} (${element.code})`;
+        list.append(div);
+      });
+    })
+    .catch((error) => console.error("Ошибка загрузки данных:", error));
+}
+
+function flight_from(event, focus = false) {
+  let input = event.target;
+  showplaces(input);
+  if (!focus) {
+    input.dataset.value = "";
+  }
+  fetchPlaces(input.value, "#places_from");
+}
+
+function flight_to(event, focus = false) {
+  let input = event.target;
+  showplaces(input);
+  if (!focus) {
+    input.dataset.value = "";
+  }
+  fetchPlaces(input.value, "#places_to");
+}
+
+////////////////////////////////////////////////////
+/* 
 function flight_to(event, focus = false) {
   let input = event.target;
   let list = document.querySelector("#places_to");
@@ -110,7 +150,9 @@ function flight_from(event, focus = false) {
       console.error("Ошибка загрузки данных:", error);
     });
 }
+ */
 
+///////////////////////////////////////////////////////////////////
 /* function flight_from(event, focus = false) {
   let input = event.target;
   let list = document.querySelector("#places_from");

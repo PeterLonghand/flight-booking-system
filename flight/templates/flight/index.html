@@ -60,8 +60,16 @@
                         
                         
                         
-                        
+
                         <div class="input-row">
+                            <label for="flight_to">Пункт назначения:</label>
+                            <input type="text" name="Destination" placeholder="В:" id="flight-to" class="form-control mr-sm-3" onblur="hideplaces(this)" data-value="{{destination | lower}}" data-list="places_to" autocomplete="off" value="{{destination | upper}}">
+                            <div id="places_to" class="places_box"></div>
+                          </div>
+                          
+
+                        
+                        <!-- <div class="input-row">
                             <label for="flight_to">Пункт назначения: </label>
                             <input type="text" name="Destination" placeholder="В:" id="flight-to" class="form-control mr-sm-3" onblur="hideplaces(this)" data-value="{{destination | lower}}" data-list="places_to" autocomplete="off" value="{{destination | upper}}">
                             <div id="places_to" class="places_box">
@@ -73,7 +81,7 @@
                                 <div class="each_places_to_list places__list" data-value="tpe" onclick="selectplace(this)">Taipei (Taiwan)</div>
                                 <div class="each_places_to_list places__list" data-value="nyc" onclick="selectplace(this)">New York (USA)</div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="input-row">
                             <label for="depart_date">Дата полёта: </label>
                             <input type="date" name="DepartDate" min="{{min_date}}" max="{{max_date}}" id="depart_date" placeholder="Date" class="form-control mr-sm-2" value="{{depart_date}}">
