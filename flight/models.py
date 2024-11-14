@@ -36,13 +36,18 @@ class User(AbstractUser):
         return f"{self.id}: {self.username} ({self.firstname} {self.surname})"
 
 class Place(models.Model):
-    city = models.CharField(max_length=64)
-    airport = models.CharField(max_length=64)
-    code = models.CharField(max_length=3)
-    country = models.CharField(max_length=64)
+    city = models.CharField(
+        max_length=25,
+        validators=[RegexValidator(r'^[a-zA-Zа-яА-Я\s\-]{3,25}$', 'Только буквы, пробелы и тире')],
+    )
+    #airport = models.CharField(max_length=64)
+    code = models.CharField(
+        max_length=4,
+        validators=[RegexValidator(r'^[a-zA-Zа-яА-Я]{3,4}$', 'Только буквы')],)
+    #country = models.CharField(max_length=64)
 
     def __str__(self):
-        return f"{self.city}, {self.country} ({self.code})"
+        return f"{self.city} ({self.code})"
 
 
 class Week(models.Model):

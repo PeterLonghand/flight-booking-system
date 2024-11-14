@@ -6,7 +6,7 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register_view, name="register"),
-    path("query/places/<str:q>", views.query, name="query"),
+    #path("query/places/<str:q>", views.query, name="query"),
     path("flight", views.flight, name="flight"),
     path("review", views.review, name="review"),
     path("flight/ticket/book", views.book, name="book"),
@@ -21,5 +21,8 @@ urlpatterns = [
     path('terms-and-conditions', views.terms_and_conditions, name="termsandconditions"),
     path('about-us', views.about_us, name="aboutus"),
     path('about_system', views.about_system, name="about_system"),
+    #
+    path('query/places/<str:query>/', views.get_places, name='get_places'),
+    #
     path('about_devs', views.about_devs, name="about_devs")
 ]

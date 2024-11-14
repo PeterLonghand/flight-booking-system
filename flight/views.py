@@ -10,6 +10,9 @@ from .models import *
 from capstone.utils import render_to_pdf, createticket
 
 
+from django.db.models import Q
+
+
 #Fee and Surcharge variable
 from .constant import FEE
 from flight.utils import createWeekDays, addPlaces, addDomesticFlights, addInternationalFlights
@@ -30,6 +33,40 @@ except:
     pass
 
 # Create your views here.
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Place
+
+
+
+
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Place
+
+
+
+###############################################
+def get_places(request, query):
+    if query == "all":  # Если запрос 'all', возвращаем все города
+        places = Place.objects.all()
+    else:
+        places = Place.objects.filter(Q(city__icontains=query) | Q(code__icontains=query))
+    
+    place_list = [{'city': place.city, 'code': place.code} for place in places]
+    return JsonResponse(place_list, safe=False)
+
+
+###################################################
+""" def get_places(request, query):
+    places = Place.objects.filter(Q(city__icontains=query) | Q(code__icontains=query))
+    place_list = [{'city': place.city, 'code': place.code} for place in places]
+
+    print(f"Найдено мест: {len(place_list)}")
+    return JsonResponse(place_list, safe=False) """
+
+##################################################
+
 
 def index(request):
     min_date = f"{datetime.now().date().year}-{datetime.now().date().month}-{datetime.now().date().day}"
@@ -162,9 +199,9 @@ def query(request, q):
     filters = []
     q = q.lower()
     for place in places:
-        if (q in place.city.lower()) or (q in place.airport.lower()) or (q in place.code.lower()) or (q in place.country.lower()):
+        if (q in place.city.lower()) or (q in place.code.lower()) :
             filters.append(place)
-    return JsonResponse([{'code':place.code, 'city':place.city, 'country': place.country} for place in filters], safe=False)
+    return JsonResponse([{'code':place.code, 'city':place.city} for place in filters], safe=False)
 
 @csrf_exempt
 def flight(request):

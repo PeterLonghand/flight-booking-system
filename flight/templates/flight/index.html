@@ -32,9 +32,9 @@
                             </label>
                         </div> -->
                         </div>
-                        <div class="input-row">
+                        <!-- <div class="input-row">
                             <label for="flight-from">Пункт отправления: </label>
-                            <input type="text" name="Origin" placeholder="Из:" id="flight-from" class="form-control mr-sm-3" onblur="hideplaces(this)" data-value="{{origin | lower}}" data-list="places_from" autocomplete="off" value="{{origin | upper}}">  <!--list="places_from"-->
+                            <input type="text" name="Origin" placeholder="Из:" id="flight-from" class="form-control mr-sm-3" onblur="hideplaces(this)" data-value="{{origin | lower}}" data-list="places_from" autocomplete="off" value="{{origin | upper}}">  
                             <div id="places_from" class="places_box">
                                 <div class="each_places_from_list places__list" data-value="del" onclick="selectplace(this)">Delhi (India)</div>
                                 <div class="each_places_from_list places__list" data-value="bom" onclick="selectplace(this)">Mumbai (India)</div>
@@ -44,7 +44,23 @@
                                 <div class="each_places_from_list places__list" data-value="tpe" onclick="selectplace(this)">Taipei (Taiwan)</div>
                                 <div class="each_places_from_list places__list" data-value="nyc" onclick="selectplace(this)">New York (USA)</div>
                             </div>
+                        </div> -->
+                        
+                        <div class="input-row">
+                            <label for="flight-from">Пункт отправления: </label>
+                            <input type="text" name="Origin" placeholder="Из:" id="flight-from" 
+                                   class="form-control mr-sm-3" 
+                                   onfocus="flight_from(event, true)" 
+                                   oninput="flight_from(event)" 
+                                   onblur="hideplaces(this)" 
+                                   autocomplete="off">
+                            
+                            <div id="places_from" class="places_box"></div>
                         </div>
+                        
+                        
+                        
+                        
                         <div class="input-row">
                             <label for="flight_to">Пункт назначения: </label>
                             <input type="text" name="Destination" placeholder="В:" id="flight-to" class="form-control mr-sm-3" onblur="hideplaces(this)" data-value="{{destination | lower}}" data-list="places_to" autocomplete="off" value="{{destination | upper}}">
