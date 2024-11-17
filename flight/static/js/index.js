@@ -198,28 +198,45 @@ function trip_type() {
 }
 
 function flight_search() {
-  if (!document.querySelector("#flight-from").dataset.value) {
-    alert("Please select flight origin.");
+  const flightFrom = document.querySelector("#flight-from").dataset.value;
+  const flightTo = document.querySelector("#flight-to").dataset.value;
+
+  if (flightFrom && flightTo && flightFrom === flightTo) {
+    alert("Пункт отправления и пункт назначения не могут совпадать.");
     return false;
   }
-  if (!document.querySelector("#flight-to").dataset.value) {
-    alert("Please select flight destination.");
+
+  if (!flightFrom) {
+    alert("Пожалуйста, выберите пункт отправления.");
     return false;
   }
+  if (!flightTo) {
+    alert("Пожалуйста, выберите пункт назначения.");
+    return false;
+  }
+  if (
+    !document.querySelector("#depart_date").value ||
+    document.querySelector("#depart_date").value == null
+  ) {
+    alert("Пожалуйста, выберите дату полёта.");
+    return false;
+  }
+
+  /* 
   if (document.querySelector("#one-way").checked) {
     if (!document.querySelector("#depart_date").value) {
-      alert("Please select departure date.");
+      alert("Пожалуйста, выберите дату полёта.");
       return false;
     }
   }
   if (document.querySelector("#round-trip").checked) {
     if (!document.querySelector("#depart_date").value) {
-      alert("Please select departure date.");
+      alert("Пожалуйста, выберите дату полёта.");
       return false;
     }
     if (!document.querySelector("#return_date").value) {
-      alert("Please select return date.");
+      alert("Пожалуйста, выберите дату возврата.");
       return false;
     }
-  }
+  } */
 }

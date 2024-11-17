@@ -16,18 +16,18 @@ function add_traveller() {
   let gender = div.querySelectorAll(".gender");
   let gender_val = null;
   if (fname.value.trim().length === 0) {
-    alert("Please enter First Name.");
+    alert("Пожалуйста, введите имя");
     return false;
   }
 
   if (lname.value.trim().length === 0) {
-    alert("Please enter Last Name.");
+    alert("Пожалуйста, введите фамилию");
     return false;
   }
 
   if (!gender[0].checked) {
     if (!gender[1].checked) {
-      alert("Please select gender.");
+      alert("Пожалуйста, выберите пол");
       return false;
     } else {
       gender_val = gender[1].value;

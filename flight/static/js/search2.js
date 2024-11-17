@@ -310,20 +310,23 @@ function inactive2(slot) {
 /////////////////////////////
 
 function filter_price() {
-  let value = document.querySelector(".filter-price input[type=range]").value;
+  let value = parseInt(
+    document.querySelector(".filter-price input[type=range]").value
+  );
   document.querySelector(".filter-price .final-price-value").innerText = value;
 
   let div = document.querySelector("#flights_div");
   let flights = div.querySelectorAll(".each-flight-div-box");
+
   for (let i = 0; i < flights.length; i++) {
-    if (
-      flights[i].querySelector(".flight-price span").innerText > parseInt(value)
-    ) {
-      //flights[i].style.display = 'none';
+    let price = parseInt(
+      flights[i].querySelector(".flight-price span").innerText
+    );
+
+    if (price > value) {
       flights[i].classList.add("hide");
       flights[i].classList.remove("show");
     } else {
-      //flights[i].style.display = 'block';
       flights[i].classList.add("show");
       flights[i].classList.remove("hide");
     }
