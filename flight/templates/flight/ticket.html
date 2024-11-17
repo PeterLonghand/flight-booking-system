@@ -125,13 +125,13 @@
     <hr style="height: 1px; border: 0; background-color: grey;" noshade>
     <main style="padding: 10px;">
         <div style="margin: 15px auto;">
-            <h3>Important information</h3>
+            <h3>Важная информация</h3>
             <ul style="padding-left: 50px;">
                 <li>
-                    привеееет This is your E-Ticket Iternary. You must bring it to the airport for check-in, and it is recommended you to retain a copy for your records.
+                    Это Ваш Электронный билет. Вы должны взять его с собой в аэропорт для регистрации на рейс.
                 </li>
                 <li>
-                    Each passenger travelling needs a printed copy of this document for immigrations, customs, airport security checks and duty free purchases.
+                    Каждому путешествующему пассажиру необходима распечатанная копия этого документа для прохождения регистрации на рейс, досмотра в аэропорту и покупок в дьюти-фри.
                 </li>
                 <li>
                     Economy Class passengers should report to airline check-in desks 3 hours prior to departure of all flights. First and Business Class passengers should report to airline check-in desks not later than 1 hour prior to departure. Boarding for your flight begins at least 35 minutes before your scheduled departure time. Gates close 15 minutes prior to departure
@@ -146,25 +146,25 @@
             </table>
             <table cellspacing='0' >
                 <tr class="tr-odd">
-                    <th>TICKET REFERENCE</th>
+                    <th>НОМЕР БИЛЕТА</th>
                     <td>{{ticket1.ref_no | upper}}</td>
-                    <th>BOOKING DATE & TIME</th>
+                    <th>ДАТА И ВРЕМЯ БРОНИРОВАНИЯ</th>
                     <td>{{ticket1.booking_date | date:'d M y' | upper}}<br>{{ticket1.booking_date | time:'Hi' | upper}}</td>
                 </tr>
                 <tr class="tr-even">
-                    <th>FLIGHT DATE</th>
+                    <th>ДАТА ПОЛЕТА</th>
                     <td>{{ticket1.flight_ddate | date:'d M y' | upper}}</td>
-                    <th>CLASS</th>
+                    <th>КЛАСС ОБСЛУЖИВАНИЯ</th>
                     <td>{{ticket1.seat_class | upper}}</td>
                 </tr>
                 <tr class="tr-odd">
                     <th>EMAIL</th>
                     <td>{{ticket1.email}}</td>
-                    <th>MOBILE</th>
+                    <th>ТЕЛЕФОН</th>
                     <td>{{ticket1.mobile}}</td>
                 </tr>
                 <tr class="tr-even">
-                    <th>STATUS</th>
+                    <th>СТАТУС</th>
                     <td>{{ticket1.status | upper}}</td>
                     <th></th>
                     <td></td>
@@ -172,15 +172,15 @@
             </table>
             <table class="table">
                 <tr class="tr-caption">
-                    <td style="width: 100%;">PASSENGER INFORMATION</td>
+                    <td style="width: 100%;">ДАННЫЕ О ПАССАЖИРАХ</td>
                 </tr>
             </table>
             <table cellspacing='0'>
                 <tr class="tr-odd">
                     <th>S NO.</th>
-                    <th>PASSENGER NAME</th>
-                    <th>SEX</th>
-                    <th>CLASS</th>
+                    <th>ФИО ПАССАЖИРА</th>
+                    <th>ПОЛ</th>
+                    <th>КЛАСС ОБСЛУЖИВАНИЯ</th>
                 </tr>
                 {% for passenger in ticket1.passengers.all %}
                     {% if forloop.counter|divisibleby:2 %}
@@ -203,24 +203,24 @@
             </table>
             <table class="table">
                 <tr class="tr-caption">
-                    <td style="width: 100%; padding-left: 20px;">FLIGHT INFORMATION</td>
+                    <td style="width: 100%; padding-left: 20px;">ИНФОРМАЦИЯ О РЕЙСЕ</td>
                 </tr>
             </table>
             <table cellspacing='0'>
                 <tr class="tr-odd">
                     <th>FLIGHT</th>
-                    <th>DEPART/ARRIVE</th>
-                    <th>AIRPORT/TERMINAL</th>
+                    <th>ОТПРАВЛЕНИЕ/ПРИБЫТИЕ</th>
+                    <th>ГОРОД/АЭРОПОРТ</th>
                 </tr>
                 <tr class="tr-even">
                     <td style="width: 29%; padding-left: 20px;">{{ticket1.flight.airline | upper}}<br>{{ticket1.flight.plane | upper}}</td>
                     <td style="width: 22%; padding-left: 20px;">{{ticket1.flight_ddate | date:'d M y' | upper}}<br>{{ticket1.flight.depart_time | time:'Hi'}}</td>
-                    <td style="width: 49%; padding-left: 20px;">{{ticket1.flight.origin.airport | upper}} ({{ticket1.flight.origin.code | upper}})</td>
+                    <td style="width: 49%; padding-left: 20px;">{{ticket1.flight.origin.city | upper}} ({{ticket1.flight.origin.code | upper}})</td>
                 </tr>
                 <tr class="tr-odd">
                     <td style="width: 29%; padding-left: 20px;"></td>
                     <td style="width: 22%; padding-left: 20px;">{{ticket1.flight_adate | date:'d M y' | upper}}<br>{{ticket1.flight.arrival_time | time:'Hi'}}</td>
-                    <td style="width: 49%; padding-left: 20px;">{{ticket1.flight.destination.airport | upper}} ({{ticket1.flight.destination.code | upper}})</td>
+                    <td style="width: 49%; padding-left: 20px;">{{ticket1.flight.destination.city | upper}} ({{ticket1.flight.destination.code | upper}})</td>
                 </tr>
             </table>
             {% if ticket2 %}
