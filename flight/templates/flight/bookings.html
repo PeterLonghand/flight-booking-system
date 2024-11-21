@@ -17,12 +17,12 @@
                         <div class="col-2" style="display: flex;">
                             <div style="display: flex; color: #666666; margin-top: auto;">
                                 <div>
-                                    <span style="font-size: 2.1em;">{{ticket.flight_ddate | date:"d"}}</span>
+                                    <span style="font-size: 2.1em;">{{ticket.depart_date | date:"d"}}</span>
                                 </div>
                                 <div style="font-size: smaller; display: flex; margin: auto 0; padding-left: 5px; line-height: 1em;">
                                     <div style="margin: auto;">
-                                        <div style="margin-bottom: 1px;">{{ticket.flight_ddate | date:"D"}}</div>
-                                        <div style="margin-top: 1px;">{{ticket.flight_ddate | date:"M'y"}}</div>
+                                        <div style="margin-bottom: 1px;">{{ticket.depart_date | date:"D"}}</div>
+                                        <div style="margin-top: 1px;">{{ticket.depart_date | date:"M'y"}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                                     <div style="max-width: 45%;">{{ticket.flight.destination.city}}</div>
                                 </div>
                                 <div class="row places-div" style="font-size: .8em; color: #999999; ">
-                                    <div style="max-width: 100%;">{{ticket.flight.airline}} &middot; {{ticket.flight.plane}} &middot; {{ticket.passengers.count}} Passengers</div>
+                                    <div style="max-width: 100%;">{{ticket.transport_company}} &middot; {{ticket.plane}} &middot; Пассажиров: {{ticket.passengers.count}} </div>
                                 </div>
                             </div>
                         </div>
@@ -46,18 +46,18 @@
                             <div>
                                 <div class="row status-div">
                                     {% if ticket.status == 'CONFIRMED' %}
-                                        <div class="green">{{ticket.status}}</div>
+                                        <div class="green">ПОДТВЕРЖДЕНО</div>
                                     {% endif %}
                                     {% if ticket.status == 'PENDING' %}
-                                        <div class="orange">{{ticket.status}}</div>
+                                        <div class="orange">В ОБРАБОТКЕ</div>
                                     {% endif %}
-                                    {% if ticket.status == 'CANCELLED' %}
-                                        <div class="red">{{ticket.status}}</div>
+                                    {% if ticket.status == 'ОТМЕНЕНО' %}
+                                        <div class="red">ОТМЕНЕНО</div>
                                     {% endif %}
                                 </div>
                                 <div class="row booking-date-div" style="font-size: .7em; color: #666;">
                                     {% if ticket.status == 'CONFIRMED' %}
-                                        Booked on: {{ticket.booking_date | date:"D, M d Y"}}
+                                        Дата брони: {{ticket.booking_date | date:"D, M d Y"}}
                                     {% endif %}
                                     {% if ticket.status == 'PENDING' %}
                                         Reviewed on: {{ticket.booking_date | date:"D, M d Y"}}
@@ -81,7 +81,7 @@
                                                 </svg>
                                             </button>
                                         </form>
-                                        <button class="btn btn-outline-danger btnp cbtn"  data-ref="{{ticket.ref_no}}" onclick="popup(this)">Cancel</button>
+                                        <button class="btn btn-outline-danger btnp cbtn"  data-ref="{{ticket.ref_no}}" onclick="popup(this)">Отменить</button>
                                     {% endif %}
                                     {% if ticket.status == 'PENDING' %}
                                         <form action="{% url 'resumebooking' %}" method="POST">
@@ -94,7 +94,7 @@
                                             </button>
                                         </form>
 
-                                        <button type="button" class="btn btn-outline-danger btnp cbtn" data-ref="{{ticket.ref_no}}" onclick="popup(this)">Cancel</button>
+                                        <button type="button" class="btn btn-outline-danger btnp cbtn" data-ref="{{ticket.ref_no}}" onclick="popup(this)">Отменить</button>
                                     {% endif %}
                                     {% if ticket.status == 'CANCELLED' %}
                                     {% endif %}

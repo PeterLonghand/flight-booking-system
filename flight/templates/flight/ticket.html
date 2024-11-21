@@ -153,9 +153,9 @@
                 </tr>
                 <tr class="tr-even">
                     <th>ДАТА ПОЛЕТА</th>
-                    <td>{{ticket1.flight_ddate | date:'d M y' | upper}}</td>
-                    <th>КЛАСС ОБСЛУЖИВАНИЯ</th>
-                    <td>{{ticket1.seat_class | upper}}</td>
+                    <td>{{ticket1.booking_date | date:'d M y' | upper}}</td>
+                    <!-- <th>КЛАСС ОБСЛУЖИВАНИЯ</th>
+                    <td>{{ticket1.seat_class | upper}}</td> -->
                 </tr>
                 <tr class="tr-odd">
                     <th>EMAIL</th>
@@ -177,7 +177,7 @@
             </table>
             <table cellspacing='0'>
                 <tr class="tr-odd">
-                    <th>S NO.</th>
+                    <th>№</th>
                     <th>ФИО ПАССАЖИРА</th>
                     <th>ПОЛ</th>
                     <th>КЛАСС ОБСЛУЖИВАНИЯ</th>
@@ -186,14 +186,14 @@
                     {% if forloop.counter|divisibleby:2 %}
                         <tr class="tr-odd">
                             <td style="width: 20%; padding-left: 20px;">{{forloop.counter}}</td>
-                            <td style="width: 35%; padding-left: 20px;">{{passenger.last_name | upper}}/{{passenger.first_name | upper}}</td>
+                            <td style="width: 35%; padding-left: 20px;">{{passenger.last_name | upper}}  {{passenger.first_name | upper}}  {{passenger.patronymic}}</td>
                             <td style="width: 20%; padding-left: 20px;">{{passenger.gender | upper}}</td>
                             <td style="width: 25%; padding-left: 20px;">{{ticket1.seat_class | upper}}</td>
                         </tr>
                     {% else %}
                         <tr class="tr-even">
                             <td style="width: 20%; padding-left: 20px;">{{forloop.counter}}</td>
-                            <td style="width: 35%; padding-left: 20px;">{{passenger.last_name | upper}}/{{passenger.first_name | upper}}</td>
+                            <td style="width: 35%; padding-left: 20px;">{{passenger.last_name | upper}}  {{passenger.first_name | upper}}  {{passenger.patronymic}}</td>
                             <td style="width: 20%; padding-left: 20px;">{{passenger.gender | upper}}</td>
                             <td style="width: 25%; padding-left: 20px;">{{ticket1.seat_class | upper}}</td>
                         </tr>

@@ -75,12 +75,18 @@ def createticket(user,passengers,passengerscount,flight1,flight_1date,flight_1cl
     for passenger in passengers:
         ticket.passengers.add(passenger)
     ticket.flight = flight1
+    #print(flight_1date)
     ticket.flight_ddate = datetime(int(flight_1date.split('-')[2]),int(flight_1date.split('-')[1]),int(flight_1date.split('-')[0]))
+    #print(ticket.flight_ddate)
     ###################
-    flight1ddate = datetime(int(flight_1date.split('-')[2]),int(flight_1date.split('-')[1]),int(flight_1date.split('-')[0]),flight1.depart_time.hour,flight1.depart_time.minute)
-    flight1adate = (flight1ddate + flight1.duration)
+    #print(f'\n\n\n{flight1.depart_datetime}\n\n')
+    #flight1ddate = datetime(int(flight_1date.split('-')[2]),int(flight_1date.split('-')[1]),int(flight_1date.split('-')[0]),flight1.depart_time.hour,flight1.depart_time.minute)
+    flight1adate = flight1.arrival_datetime
     ###################
+    #print('всё ещё ок')
     ticket.flight_adate = datetime(flight1adate.year,flight1adate.month,flight1adate.day)
+    #print(ticket.flight_adate)
+    
     ffre = 0.0
     if flight_1class.lower() == 'first':
         ticket.flight_fare = flight1.first_fare*int(passengerscount)
@@ -89,16 +95,18 @@ def createticket(user,passengers,passengerscount,flight1,flight_1date,flight_1cl
         ticket.flight_fare = flight1.business_fare*int(passengerscount)
         ffre = flight1.business_fare*int(passengerscount)
     else:
-        ticket.flight_fare = flight1.economy_fare*int(passengerscount)
-        ffre = flight1.economy_fare*int(passengerscount)
+        ticket.flight_fare = flight1.economy_seat_cost*int(passengerscount)
+        ffre = flight1.economy_seat_cost*int(passengerscount)
     ticket.other_charges = FEE
     if coupon:
         ticket.coupon_used = coupon                     ##########Coupon
     ticket.total_fare = ffre+FEE+0.0                    ##########Total(Including coupon)
     ticket.seat_class = flight_1class.lower()
+    #TODO: сделать так, чтобы у каждого пассажира был свой класс обслуживания
     ticket.status = 'PENDING'
     ticket.mobile = ('+'+countrycode+' '+mobile)
     ticket.email = email
     ticket.save()
     #print(ticket.user)
+    print(ticket)
     return ticket

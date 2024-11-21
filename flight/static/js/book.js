@@ -4,8 +4,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function flight_duration() {
   document.querySelectorAll(".duration").forEach((element) => {
-    let time = element.dataset.value.split(":");
-    element.innerText = time[0] + "h " + time[1] + "m";
+    let timeString = element.dataset.value.trim();
+    console.log("Raw time string:", timeString); // Логируем строку
+
+    let hours = 0;
+    let minutes = 0;
+
+    // Проверим наличие чисел для часов и минут
+    const hoursMatch = timeString.match(/(\d+)\s*(hours?|hrs?)/);
+    const minutesMatch = timeString.match(/(\d+)\s*(minutes?|mins?)/);
+
+    if (hoursMatch) {
+      hours = hoursMatch[1]; // Извлекаем количество часов
+      console.log("Hours found:", hours); // Логируем количество часов
+    } else {
+      console.log("No hours match");
+    }
+
+    if (minutesMatch) {
+      minutes = minutesMatch[1]; // Извлекаем количество минут
+      console.log("Minutes found:", minutes); // Логируем количество минут
+    } else {
+      console.log("No minutes match");
+    }
+
+    // Обновляем текст в элементе с нужным форматом
+    element.innerText = `${hours}ч ${minutes}мин`;
   });
 }
 
@@ -78,12 +102,12 @@ function add_traveller() {
 
   let pcount = document.querySelector("#p-count").value;
   let fare = document.querySelector("#basefare").value;
-  let fee = document.querySelector("#fee").value;
+  // let fee = document.querySelector("#fee").value;
   if (parseInt(pcount) !== 0) {
     document.querySelector(".base-fare-value span").innerText =
       parseInt(fare) * parseInt(pcount);
     document.querySelector(".total-fare-value span").innerText =
-      parseInt(fare) * parseInt(pcount) + parseInt(fee);
+      parseInt(fare) * parseInt(pcount);
   }
 }
 
@@ -100,12 +124,12 @@ function del_traveller(btn) {
 
   let pcount = document.querySelector("#p-count").value;
   let fare = document.querySelector("#basefare").value;
-  let fee = document.querySelector("#fee").value;
+  // let fee = document.querySelector("#fee").value;
   if (parseInt(pcount) !== 0) {
     document.querySelector(".base-fare-value span").innerText =
       parseInt(fare) * parseInt(pcount);
     document.querySelector(".total-fare-value span").innerText =
-      parseInt(fare) * parseInt(pcount) + parseInt(fee);
+      parseInt(fare) * parseInt(pcount);
   }
 }
 
