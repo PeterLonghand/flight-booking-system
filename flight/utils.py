@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime
 from flight.models import *
-from .models import Week, Place, Flight
+from .models import  Place, Flight
 from tqdm import tqdm
 
 def get_number_of_lines(file):
@@ -8,11 +8,11 @@ def get_number_of_lines(file):
         for i, l in enumerate(f):
             pass
     return i + 1
-
+""" 
 def createWeekDays():
     days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
     for i,day in enumerate(days):
-        Week.objects.create(number=i, name=day)
+        Week.objects.create(number=i, name=day) """
 
 def addPlaces():
     file = open("./Data/airports.csv", "r")
@@ -32,7 +32,7 @@ def addPlaces():
             continue
     print("Done.\n")
 
-def addDomesticFlights():
+""" def addDomesticFlights():
     file = open("./Data/domestic_flights.csv", "r")
     print("Adding Domestic Flights...")
     total = get_number_of_lines("./Data/domestic_flights.csv")
@@ -60,9 +60,9 @@ def addDomesticFlights():
         except Exception as e:
             print(e)
             return
-    print("Done.\n")
+    print("Done.\n") """
 
-def addInternationalFlights():
+""" def addInternationalFlights():
     file = open("./Data/international_flights.csv", "r")
     print("Adding International Flights...")
     total = get_number_of_lines("./Data/international_flights.csv")
@@ -91,3 +91,4 @@ def addInternationalFlights():
             print(e)
             return
     print("Done.\n")
+ """

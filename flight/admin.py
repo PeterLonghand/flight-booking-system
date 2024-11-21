@@ -5,7 +5,9 @@ from .models import * """
 # Register your models here.
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Place, Week, Flight, Passenger, Ticket
+from .models import User, Place, Flight, Passenger, Ticket, TransportCompany, PlaneModel, Plane, SeatClass, Seat
+
+from django import forms
 
 # Создаем кастомный админ-класс для пользователя
 class UserAdmin(BaseUserAdmin):
@@ -29,10 +31,16 @@ class UserAdmin(BaseUserAdmin):
 # Регистрируем кастомную модель пользователя с кастомным админ-классом
 admin.site.register(User, UserAdmin)
 admin.site.register(Place)
-admin.site.register(Week)
+""" admin.site.register(Week) """
 admin.site.register(Flight)
 admin.site.register(Passenger)
 admin.site.register(Ticket)
+admin.site.register(TransportCompany)
+admin.site.register(PlaneModel)
+admin.site.register(Plane)
+admin.site.register(SeatClass)
+admin.site.register(Seat)
+
 
 
 """ 
