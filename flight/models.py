@@ -222,8 +222,11 @@ class Flight(models.Model):
 
     @property
     def depart_day(self):
-        # Возвращаем только время для depart_datetime
         return self.depart_datetime.date() if self.depart_datetime else None
+    
+    @property
+    def arrival_day(self):
+        return self.arrival_datetime.date() if self.arrival_datetime else None
     
     @property
     def arrival_time(self):
@@ -265,8 +268,8 @@ class Passenger(models.Model):
     gender = models.CharField(
         max_length=36,
         choices=[
-            ('male', 'Мужской'),
-            ('female', 'Женский')
+            ('муж', 'Мужской'),
+            ('жен', 'Женский')
         ],
         #null=False,
         verbose_name="Пол"
@@ -298,6 +301,9 @@ class Ticket(models.Model):
     @property
     def depart_date(self):
         return self.flight.depart_datetime.date()
+    @property
+    def arrival_date(self):
+        return self.flight.arrival_datetime.date()
     @property
     def depart_city(self):
         return self.flight.origin

@@ -37,18 +37,29 @@ function add_traveller() {
   let div = document.querySelector(".add-traveller-div");
   let fname = div.querySelector("#fname");
   let lname = div.querySelector("#lname");
+  let patronymic = div.querySelector("#patronymic"); // Новое поле отчества
   let gender = div.querySelectorAll(".gender");
   let gender_val = null;
+
+  // Проверка имени
   if (fname.value.trim().length === 0) {
     alert("Пожалуйста, введите имя");
     return false;
   }
 
+  // Проверка фамилии
   if (lname.value.trim().length === 0) {
     alert("Пожалуйста, введите фамилию");
     return false;
   }
 
+  // Проверка отчества
+  if (patronymic.value.trim().length === 0) {
+    alert("Пожалуйста, введите отчество");
+    return false;
+  }
+
+  // Проверка пола
   if (!gender[0].checked) {
     if (!gender[1].checked) {
       alert("Пожалуйста, выберите пол");
@@ -64,11 +75,12 @@ function add_traveller() {
     ".each-traveller-div .each-traveller"
   ).length;
 
+  // Добавляем пассажира
   let traveller = `<div class="row each-traveller">
                         <div>
                             <span class="traveller-name">${fname.value} ${
     lname.value
-  }</span><span>,</span>
+  } ${patronymic.value}</span><span>,</span>
                             <span class="traveller-gender">${gender_val.toUpperCase()}</span>
                         </div>
                         <input type="hidden" name="passenger${
@@ -77,6 +89,9 @@ function add_traveller() {
                         <input type="hidden" name="passenger${
                           passengerCount + 1
                         }LName" value="${lname.value}">
+                        <input type="hidden" name="passenger${
+                          passengerCount + 1
+                        }Patronymic" value="${patronymic.value}">
                         <input type="hidden" name="passenger${
                           passengerCount + 1
                         }Gender" value="${gender_val}">
@@ -94,15 +109,18 @@ function add_traveller() {
   div.parentElement.querySelector(".traveller-head h6 span").innerText =
     passengerCount + 1;
   div.parentElement.querySelector(".no-traveller").style.display = "none";
+
+  // Очищаем поля ввода
   fname.value = "";
   lname.value = "";
+  patronymic.value = "";
   gender.forEach((radio) => {
     radio.checked = false;
   });
 
+  // Обновление цен
   let pcount = document.querySelector("#p-count").value;
   let fare = document.querySelector("#basefare").value;
-  // let fee = document.querySelector("#fee").value;
   if (parseInt(pcount) !== 0) {
     document.querySelector(".base-fare-value span").innerText =
       parseInt(fare) * parseInt(pcount);
@@ -138,6 +156,6 @@ function book_submit() {
   if (parseInt(pcount.value) > 0) {
     return true;
   }
-  alert("Please add atleast one passenger.");
+  alert("Пожалуйста, добавьте хотя бы одного пассажира.");
   return false;
 }

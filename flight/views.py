@@ -249,10 +249,10 @@ def flight(request):
                 min_price2 = 0  ##
          """        
     elif seat == 'business':
-        flights = Flight.objects.filter(depart_day=flightday,origin=origin,destination=destination).exclude(business_fare=0).order_by('business_fare')
+        flights = Flight.objects.filter(depart_datetime__date=flightday,origin=origin,destination=destination).exclude(business_seat_cost=0).order_by('business_seat_cost')
         try:
-            max_price = flights.last().business_fare
-            min_price = flights.first().business_fare
+            max_price = flights.last().business_seat_cost
+            min_price = flights.first().business_seat_cost
         except:
             max_price = 0
             min_price = 0
@@ -266,7 +266,7 @@ def flight(request):
                 max_price2 = 0  ##
                 min_price2 = 0  ##
  """
-    elif seat == 'first':
+    """ elif seat == 'first':
         flights = Flight.objects.filter(depart_day=flightday,origin=origin,destination=destination).exclude(first_fare=0).order_by('first_fare')
         try:
             max_price = flights.last().first_fare
@@ -274,8 +274,9 @@ def flight(request):
         except:
             max_price = 0
             min_price = 0
-            
-        """ if trip_type == '2':    ##
+     """ 
+    #       
+    """    if trip_type == '2':    ##
             flights2 = Flight.objects.filter(depart_day=flightday2,origin=origin2,destination=destination2).exclude(first_fare=0).order_by('first_fare')
             try:
                 max_price2 = flights2.last().first_fare   ##
@@ -351,6 +352,7 @@ def review(request):
 
 def book(request):
     if request.method == 'POST':
+        print(request.POST)
         if request.user.is_authenticated:
             flight_1 = request.POST.get('flight1')
             flight_1date = request.POST.get('flight1Date')
@@ -372,8 +374,9 @@ def book(request):
             for i in range(1,int(passengerscount)+1):
                 fname = request.POST[f'passenger{i}FName']
                 lname = request.POST[f'passenger{i}LName']
+                patronymic = request.POST[f'passenger{i}Patronymic']
                 gender = request.POST[f'passenger{i}Gender']
-                passengers.append(Passenger.objects.create(first_name=fname,last_name=lname,gender=gender.lower()))
+                passengers.append(Passenger.objects.create(first_name=fname,last_name=lname,patronymic=patronymic,gender=gender.lower()))
             coupon = request.POST.get('coupon')
             
             try:
@@ -407,6 +410,8 @@ def book(request):
                     'ticket': ticket1.id,   ##
                     'ticket2': ticket2.id   ##
                 })  ##
+            
+            print('привет из bookkkk')
             return render(request, "flight/payment.html", {
                 'fare': fare+FEE,
                 'ticket': ticket1.id
@@ -417,20 +422,21 @@ def book(request):
         return HttpResponse("Method must be post.")
 
 def payment(request):
+    print('привет из payment')
     if request.user.is_authenticated:
-        if request.method == 'POST':
+        #if request.method == 'POST':
             ticket_id = request.POST['ticket']
             t2 = False
-            if request.POST.get('ticket2'):
-                ticket2_id = request.POST['ticket2']
-                t2 = True
-            fare = request.POST.get('fare')
+            #if request.POST.get('ticket2'):
+             #   ticket2_id = request.POST['ticket2']
+              #  t2 = True
+            """ fare = request.POST.get('fare')
             card_number = request.POST['cardNumber']
             card_holder_name = request.POST['cardHolderName']
             exp_month = request.POST['expMonth']
             exp_year = request.POST['expYear']
             cvv = request.POST['cvv']
-
+ """
             try:
                 ticket = Ticket.objects.get(id=ticket_id)
                 ticket.status = 'CONFIRMED'
@@ -450,8 +456,8 @@ def payment(request):
                 })
             except Exception as e:
                 return HttpResponse(e)
-        else:
-            return HttpResponse("Method must be post.")
+        #else:
+         #   return HttpResponse("Method must be post.")
     else:
         return HttpResponseRedirect(reverse('login'))
 

@@ -145,7 +145,7 @@
                 <div class="traveller-details individual-traveller-div">
                     <div class="traveller-head">
                         <h5>Выбор места</h5>
-                        <h6><span>0</span> Пассажиров</h6>
+                        <h6>Пассажиров: <span>0</span></h6>
                     </div>
                     <hr>
                     <input type="hidden" id="p-count" name="passengersCount" value="0">
@@ -158,15 +158,20 @@
                         </div>
                     </div>
                     <div class="row add-traveller-div collapse" id="collapseExample">
-                        <div class="note-name"><span>ВАЖНО:</span> Введите имя, фамилию и отчество так, как они указаны в паспорте</div>
+                        <div class="note-name"><span>ВАЖНО:</span> Введите фамилию, имя и отчество так, как они указаны в паспорте</div>
                         <div class="row form-group add-traveller-div-name">
+                            <div class="col">
+                                <input type="text" class="form-control" id="lname" placeholder="Фамилия">
+                            </div>
+                            
                             <div class="col">
                                 <input type="text" class="form-control" id="fname" placeholder="Имя">
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" id="lname" placeholder="Фамилия">
+                                <input type="text" class="form-control" id="patronymic" placeholder="Отчество">
                             </div>
                         </div>
+                        
                         
                         <div class="row form-group radio-div">
                             <div class="form-check-inline cd">
@@ -183,6 +188,7 @@
                                 </label>
                             </div>
                         </div>
+                        <div> .......здесь будет реализован выбор места.......</div>
                         <button type="button" class="btn btn-primary btn-light" style="margin-right: auto;" onclick="add_traveller()">Добавить пассажира</button>
                     </div>
                     <hr>
@@ -199,7 +205,7 @@
                         <h5>Итого</h5>
                         <hr>
                         <div class="row base-fare">
-                            <div class="base-fae-label">Base Fare: </div>
+                            <div class="base-fae-label">...: </div>
                             <div class="base-fare-value">
                                 {% if seat == 'First' %}
                                     ₽ <span>
@@ -231,10 +237,10 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div type="hidden" class="row surcharges">
+                        <div type="hidden" class="row surcharges"><!-- 
                             <div type="hidden" class="surcharges-label">Fee & Surcharges: </div>
                             <div type="hidden" class="surcharges-value">₽ <span>{{fee}}</span></div>
-                            <input type="hidden" id="fee" value="{{fee}}">
+                            <input type="hidden" id="fee" value="{{fee}}"> -->
                         </div>
                         <hr>
                         <div class="total-fare">
@@ -243,25 +249,25 @@
                                 {% if seat == 'First' %}
                                     ₽ <span>
                                         {% if flight2 %}
-                                            {{flight1.first_seat_cost | add:flight2.first_seat_cost | add:fee}}
+                                            {{flight1.first_seat_cost | add:flight2.first_seat_cost }}
                                         {% else %}
-                                            {{flight1.first_seat_cost | add:fee}}
+                                            {{flight1.first_seat_cost }}
                                         {% endif %}
                                     </span>
                                 {% elif seat == 'Business' %}
                                     ₽ <span>
                                         {% if flight2 %}
-                                            {{flight1.business_seat_cost | add:flight2.business_seat_cost | add:fee}}
+                                            {{flight1.business_seat_cost | add:flight2.business_seat_cost }}
                                         {% else %}
-                                            {{flight1.business_seat_cost | add:fee}}
+                                            {{flight1.business_seat_cost }}
                                         {% endif %}
                                     </span>
                                 {% elif seat == 'Economy' %}
                                     ₽ <span>
                                         {% if flight2 %}
-                                            {{flight1.economy_seat_cost | add:flight2.economy_seat_cost | add:fee}}
+                                            {{flight1.economy_seat_cost | add:flight2.economy_seat_cost }}
                                         {% else %}
-                                            {{flight1.economy_seat_cost | add:fee}}
+                                            {{flight1.economy_seat_cost }}
                                         {% endif %}
                                         </span>
                                 {% endif %}
