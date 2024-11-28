@@ -556,6 +556,41 @@ def about_devs(request):
     return render(request, 'flight/about_devs.html')
 
 
+###############################
+
+def get_seat_map(request, plane_id):
+    print(f'еееее{plane_id}')
+    plane = Plane.objects.get(id=plane_id)
+    plane_model = plane.plane_model
+    seats = list(plane.seats.values("address", "available"))
+
+    return JsonResponse({
+        "planeModel": {
+            "row_length_eco": plane_model.row_length_eco,
+            "rows_left_eco": plane_model.rows_left_eco,
+            "rows_middle_eco": plane_model.rows_middle_eco,
+            "rows_right_eco": plane_model.rows_right_eco,
+            "row_length_bus": plane_model.row_length_bus,
+            "rows_left_bus": plane_model.rows_left_bus,
+            "rows_middle_bus": plane_model.rows_middle_bus,
+            "rows_right_bus": plane_model.rows_right_bus,
+        },
+        "seats": seats,
+    })
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import Flight
+
+def get_plane_id(request, flight_id):
+    flight = get_object_or_404(Flight, pk=flight_id)
+    if flight.planeid:
+        print(f'айдишник: {flight.planeid.id}')
+        return JsonResponse({"plane_id": flight.planeid.id})
+    return JsonResponse({"error": "Plane not assigned to flight"}, status=404)
+
+
+
+
 
 """ from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.urls import reverse

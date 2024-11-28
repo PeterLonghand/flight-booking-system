@@ -6,6 +6,8 @@
     <title>Бронирование | На Взлёт!</title>
     <link rel="stylesheet" href="{% static 'css/book_style.css' %}">
     <script type="text/javascript" src="{% static 'js/book.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/seatSelection.js' %}"></script>
+
 {% endblock %}
 
 {% block body %}
@@ -188,7 +190,9 @@
                                 </label>
                             </div>
                         </div>
-                        <div> .......здесь будет реализован выбор места.......</div>
+                        <div id="seat-map">
+                            <!-- Схема мест будет отрисована здесь -->
+                        </div>
                         <button type="button" class="btn btn-primary btn-light" style="margin-right: auto;" onclick="add_traveller()">Добавить пассажира</button>
                     </div>
                     <hr>

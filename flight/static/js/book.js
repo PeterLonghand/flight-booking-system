@@ -71,6 +71,122 @@ function add_traveller() {
     gender_val = gender[0].value;
   }
 
+  // Проверка выбранного места
+  if (!selectedSeat) {
+    alert("Пожалуйста, выберите место для пассажира.");
+    return false;
+  }
+
+  let passengerCount = div.parentElement.querySelectorAll(
+    ".each-traveller-div .each-traveller"
+  ).length;
+
+  // Добавляем пассажира
+  let traveller = `<div class="row each-traveller">
+                        <div>
+                            <span class="traveller-name">${fname.value} ${
+    lname.value
+  } ${patronymic.value}</span><span>,</span>
+                            <span class="traveller-gender">${gender_val.toUpperCase()}</span>
+                        </div>
+                        <input type="hidden" name="passenger${
+                          passengerCount + 1
+                        }FName" value="${fname.value}">
+                        <input type="hidden" name="passenger${
+                          passengerCount + 1
+                        }LName" value="${lname.value}">
+                        <input type="hidden" name="passenger${
+                          passengerCount + 1
+                        }Patronymic" value="${patronymic.value}">
+                        <input type="hidden" name="passenger${
+                          passengerCount + 1
+                        }Gender" value="${gender_val}">
+                        <input type="hidden" name="passenger${
+                          passengerCount + 1
+                        }Seat" value="${selectedSeat}">
+                        <div class="delete-traveller">
+                            <button class="btn" type="button" onclick="del_traveller(this)">
+                                <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>`;
+
+  div.parentElement.querySelector(".each-traveller-div").innerHTML += traveller;
+  div.parentElement.querySelector("#p-count").value = passengerCount + 1;
+  div.parentElement.querySelector(".traveller-head h6 span").innerText =
+    passengerCount + 1;
+  div.parentElement.querySelector(".no-traveller").style.display = "none";
+
+  // Очищаем поля ввода
+  fname.value = "";
+  lname.value = "";
+  patronymic.value = "";
+  gender.forEach((radio) => {
+    radio.checked = false;
+  });
+
+  // Обновление цен
+  let pcount = document.querySelector("#p-count").value;
+  let fare = document.querySelector("#basefare").value;
+  if (parseInt(pcount) !== 0) {
+    document.querySelector(".base-fare-value span").innerText =
+      parseInt(fare) * parseInt(pcount);
+    document.querySelector(".total-fare-value span").innerText =
+      parseInt(fare) * parseInt(pcount);
+  }
+
+  // Устанавливаем выбранное место как занятое (красное)
+  const selectedSeatElement = document.querySelector(
+    `.seat[data-seat="${selectedSeat}"]`
+  );
+  if (selectedSeatElement) {
+    selectedSeatElement.classList.add("occupied"); // Добавляем класс "occupied" для выделения
+    selectedSeatElement.style.backgroundColor = "red"; // Можно также применить стиль напрямую
+  }
+}
+
+/*
+function add_traveller() {
+  let div = document.querySelector(".add-traveller-div");
+  let fname = div.querySelector("#fname");
+  let lname = div.querySelector("#lname");
+  let patronymic = div.querySelector("#patronymic"); // Новое поле отчества
+  let gender = div.querySelectorAll(".gender");
+  let gender_val = null;
+
+  // Проверка имени
+  if (fname.value.trim().length === 0) {
+    alert("Пожалуйста, введите имя");
+    return false;
+  }
+
+  // Проверка фамилии
+  if (lname.value.trim().length === 0) {
+    alert("Пожалуйста, введите фамилию");
+    return false;
+  }
+
+  // Проверка отчества
+  if (patronymic.value.trim().length === 0) {
+    alert("Пожалуйста, введите отчество");
+    return false;
+  }
+
+  // Проверка пола
+  if (!gender[0].checked) {
+    if (!gender[1].checked) {
+      alert("Пожалуйста, выберите пол");
+      return false;
+    } else {
+      gender_val = gender[1].value;
+    }
+  } else {
+    gender_val = gender[0].value;
+  }
+
   let passengerCount = div.parentElement.querySelectorAll(
     ".each-traveller-div .each-traveller"
   ).length;
@@ -128,7 +244,7 @@ function add_traveller() {
       parseInt(fare) * parseInt(pcount);
   }
 }
-
+*/
 function del_traveller(btn) {
   let traveller = btn.parentElement.parentElement;
   let tvl = btn.parentElement.parentElement.parentElement.parentElement;
@@ -158,4 +274,133 @@ function book_submit() {
   }
   alert("Пожалуйста, добавьте хотя бы одного пассажира.");
   return false;
+}
+
+// // // // /// / / / // / /
+function renderSeatMap(planeModel, seats) {
+  const seatMap = document.getElementById("seat-map");
+  seatMap.innerHTML = ""; // Очистим старую схему, если она была
+
+  const classSection = document.createElement("div");
+  classSection.className = "class-section";
+
+  // Отрисовка мест для бизнес-класса
+  if (planeModel.row_length_bus > 0) {
+    const businessClassRows = renderHorizontalRows(
+      "B",
+      planeModel.row_length_bus,
+      planeModel.rows_left_bus,
+      planeModel.rows_middle_bus,
+      planeModel.rows_right_bus,
+      seats
+    );
+    classSection.appendChild(businessClassRows);
+  }
+
+  // Проход между классами
+  classSection.appendChild(createAisle());
+
+  // Отрисовка мест для эконом-класса
+  if (planeModel.row_length_eco > 0) {
+    const economyClassRows = renderHorizontalRows(
+      "E",
+      planeModel.row_length_eco,
+      planeModel.rows_left_eco,
+      planeModel.rows_middle_eco,
+      planeModel.rows_right_eco,
+      seats
+    );
+    classSection.appendChild(economyClassRows);
+  }
+
+  seatMap.appendChild(classSection);
+}
+
+function renderHorizontalRows(
+  prefix,
+  rowLength,
+  leftColumns,
+  middleColumns,
+  rightColumns,
+  seats
+) {
+  const rowsContainer = document.createElement("div");
+  rowsContainer.className = "rows-container";
+
+  // Рисуем все ряды вдоль длины (горизонтально)
+  for (let row = 0; row < rowLength; row++) {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "row";
+
+    // Левые места
+    addSeats(rowDiv, prefix, row, leftColumns, "A".charCodeAt(0), seats);
+
+    // Проход/средние места
+    if (middleColumns > 0) {
+      rowDiv.appendChild(createAisle());
+      addSeats(
+        rowDiv,
+        prefix,
+        row,
+        middleColumns,
+        "A".charCodeAt(0) + leftColumns,
+        seats
+      );
+    }
+
+    // Правые места
+    rowDiv.appendChild(createAisle());
+    addSeats(
+      rowDiv,
+      prefix,
+      row,
+      rightColumns,
+      "A".charCodeAt(0) + leftColumns + middleColumns,
+      seats
+    );
+
+    rowsContainer.appendChild(rowDiv);
+  }
+
+  return rowsContainer;
+}
+
+function addSeats(rowDiv, prefix, row, numColumns, startCharCode, seats) {
+  for (let col = 0; col < numColumns; col++) {
+    const seatCode = `${prefix}${row}${String.fromCharCode(
+      startCharCode + col
+    )}`;
+    const seat = seats.find((s) => s.address === seatCode);
+
+    const seatDiv = document.createElement("div");
+    seatDiv.className = "seat";
+    seatDiv.textContent = seatCode;
+    seatDiv.classList.add(seat && !seat.available ? "occupied" : "available");
+    if (seat && seat.available) {
+      seatDiv.addEventListener("click", () =>
+        toggleSeatSelection(seatDiv, seatCode)
+      );
+    }
+
+    rowDiv.appendChild(seatDiv);
+  }
+}
+
+function createAisle() {
+  const aisleDiv = document.createElement("div");
+  aisleDiv.className = "aisle";
+  return aisleDiv;
+}
+
+let selectedSeat = null; // Переменная для хранения выбранного места
+
+function toggleSeatSelection(seatDiv, address) {
+  const selectedSeats = document.querySelectorAll(".seat.selected");
+  if (selectedSeats.length > 0 && selectedSeats[0] !== seatDiv) {
+    selectedSeats[0].classList.remove("selected");
+  }
+
+  seatDiv.classList.toggle("selected");
+  selectedSeat = seatDiv.classList.contains("selected") ? address : null;
+  console.log("Selected seat:", address);
 }

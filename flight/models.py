@@ -202,7 +202,10 @@ class Flight(models.Model):
     active = models.BooleanField(default=True)
     planeid = models.ForeignKey(Plane, null=True, on_delete=models.CASCADE)
 
-    
+    @property
+    def plane_id(self):
+        # Получаем id самолета, связанного с этим полетом
+        return self.planeid if self.planeid else None
     
     @property
     def transport_company_name(self):
@@ -335,7 +338,7 @@ class Seat(models.Model):
     available = models.BooleanField(default=True)
     address = models.CharField(max_length=4, null=True)
     plane = models.ForeignKey(Plane, on_delete=models.CASCADE, null=True, related_name="seats")
-    ticket = models.ManyToManyField(Ticket, null=True, default=None, related_name="seats")
+    passenger = models.ManyToManyField(Passenger, null=True, default=None, related_name="seats")
     seat_class = models.ForeignKey(SeatClass, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
