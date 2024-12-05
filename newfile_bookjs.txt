@@ -1,5 +1,4 @@
 let flight1Id = -1;
-let choosedSeats = []; // Убедитесь, что переменная инициализирована.
 
 document.addEventListener("DOMContentLoaded", () => {
   flight_duration();
@@ -34,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then((data) => {
       // Отрисовываем схему мест
-      renderSeatMap(data.planeModel, data.seats, []);
+      renderSeatMap(data.planeModel, data.seats);
     })
     .catch((error) => {
       console.error("Произошла ошибка:", error);
@@ -66,12 +65,6 @@ function handleSeatClick(seatElement) {
 }
 
 function add_traveller() {
-  console.log("я в add_traveller");
-  if (!selectedSeat) {
-    alert("Пожалуйста, выберите место для пассажира.");
-    return false;
-  }
-
   let div = document.querySelector(".add-traveller-div");
   let fname = div.querySelector("#fname");
   let lname = div.querySelector("#lname");
@@ -176,10 +169,34 @@ function add_traveller() {
       parseInt(fare) * parseInt(pcount);
   }
 
+  console.log("я в add_traveller");
+  if (!selectedSeat) {
+    alert("Пожалуйста, выберите место для пассажира.");
+    return false;
+  }
   const flightId = document.querySelector('input[name="flight1"]').value; // Получаем flight.id из hidden input
 
-  choosedSeats.push(selectedSeat);
+  // Отправляем запрос на сервер для блокировки места
+  fetch(`/mark-seat-occupied/?address=${selectedSeat}&flight=${flightId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Не удалось отметить место занятым.");
+      }
 
+      // Блокируем место на клиенте
+      document
+        .querySelector(`[data-seat-id="${selectedSeat}"]`)
+        .classList.add("occupied");
+      selectedSeat = null; // Сбрасываем выбор
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
   // обновление схемы
   // После добавления пассажира и блокировки места
   fetch(`/get-plane-id/${flight1Id}/`)
@@ -204,12 +221,38 @@ function add_traveller() {
     })
     .then((data) => {
       // Отрисовываем схему мест
-      renderSeatMap(data.planeModel, data.seats, choosedSeats);
+      renderSeatMap(data.planeModel, data.seats);
     })
     .catch((error) => {
       console.error("Произошла ошибка:", error);
     });
-  //updateSeatMap();
+}
+
+function del_traveller(button) {
+  const travellerDiv = button.closest(".each-traveller");
+  const seatId = travellerDiv.querySelector('input[name*="Seat"]').value;
+
+  // Отправляем запрос на сервер для разблокировки места
+  fetch(`/mark-seat-available/${seatId}/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Не удалось освободить место.");
+      }
+
+      // Разблокируем место на клиенте
+      document
+        .querySelector(`[data-seat-id="${seatId}"]`)
+        .classList.remove("occupied");
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+
+  // Удаляем пассажира из списка
+  travellerDiv.remove();
 }
 
 ///
@@ -463,7 +506,6 @@ function add_traveller() {
 */
 function del_traveller(btn) {
   let traveller = btn.parentElement.parentElement;
-  console.log("бип", traveller);
   let tvl = btn.parentElement.parentElement.parentElement.parentElement;
   let cnt = tvl.querySelector("#p-count");
   cnt.value = parseInt(cnt.value) - 1;
@@ -471,10 +513,6 @@ function del_traveller(btn) {
   if (parseInt(cnt.value) <= 0) {
     tvl.querySelector(".no-traveller").style.display = "block";
   }
-  seatCodeCode = traveller.querySelector(
-    'input[name^="passenger"][name$="Seat"]'
-  ).value;
-  console.log("Код места:", seatCodeCode);
   traveller.remove();
 
   let pcount = document.querySelector("#p-count").value;
@@ -486,43 +524,6 @@ function del_traveller(btn) {
     document.querySelector(".total-fare-value span").innerText =
       parseInt(fare) * parseInt(pcount);
   }
-
-  // Находим индекс элемента seatValue
-  let indexof = choosedSeats.indexOf(seatCodeCode);
-
-  // Если элемент найден, удаляем его
-  if (indexof > -1) {
-    choosedSeats.splice(indexof, 1);
-  }
-  // обновление схемы
-  // После добавления пассажира и блокировки места
-  fetch(`/get-plane-id/${flight1Id}/`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Ошибка при получении plane_id");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const planeId = data.plane_id; // plane_id возвращается с сервера
-      console.log("Полученный planeId:", planeId);
-
-      // Теперь получаем данные о местах самолета
-      return fetch(`/get-seat-map/${planeId}/`);
-    })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Ошибка при получении схемы мест");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      // Отрисовываем схему мест
-      renderSeatMap(data.planeModel, data.seats, choosedSeats);
-    })
-    .catch((error) => {
-      console.error("Произошла ошибка:", error);
-    });
 }
 
 function book_submit() {
@@ -534,42 +535,8 @@ function book_submit() {
   return false;
 }
 
-function updateSeatMap() {
-  const travellers = document.querySelectorAll(".each-traveller");
-  console.log("путешественники: ", travellers);
-  const choosedSeats = Array.from(travellers).map((traveller) => {
-    return traveller.querySelector(`input[name*="Seat"]`).value;
-  });
-
-  fetch(`/get-plane-id/${flight1Id}/`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Ошибка при получении plane_id");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const planeId = data.plane_id;
-
-      return fetch(`/get-seat-map/${planeId}/`);
-    })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Ошибка при получении схемы мест");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      // Передаем массив временно занятых мест
-      renderSeatMap(data.planeModel, data.seats, choosedSeats);
-    })
-    .catch((error) => {
-      console.error("Произошла ошибка:", error);
-    });
-}
-
 // // // // /// / / / // / /
-function renderSeatMap(planeModel, seats, choosedSeats) {
+function renderSeatMap(planeModel, seats) {
   const seatMap = document.getElementById("seat-map");
   seatMap.innerHTML = ""; // Очистим старую схему, если она была
 
@@ -584,8 +551,7 @@ function renderSeatMap(planeModel, seats, choosedSeats) {
       planeModel.rows_left_bus,
       planeModel.rows_middle_bus,
       planeModel.rows_right_bus,
-      seats,
-      choosedSeats
+      seats
     );
     classSection.appendChild(businessClassRows);
   }
@@ -601,8 +567,7 @@ function renderSeatMap(planeModel, seats, choosedSeats) {
       planeModel.rows_left_eco,
       planeModel.rows_middle_eco,
       planeModel.rows_right_eco,
-      seats,
-      choosedSeats
+      seats
     );
     classSection.appendChild(economyClassRows);
   }
@@ -616,8 +581,7 @@ function renderHorizontalRows(
   leftColumns,
   middleColumns,
   rightColumns,
-  seats,
-  choosedSeats
+  seats
 ) {
   const rowsContainer = document.createElement("div");
   rowsContainer.className = "rows-container";
@@ -625,18 +589,10 @@ function renderHorizontalRows(
   // Рисуем все ряды вдоль длины (горизонтально)
   for (let row = 0; row < rowLength; row++) {
     const rowDiv = document.createElement("div");
-    rowDiv.className = "row-row ";
+    rowDiv.className = "row";
 
     // Левые места
-    addSeats(
-      rowDiv,
-      prefix,
-      row,
-      leftColumns,
-      "A".charCodeAt(0),
-      seats,
-      choosedSeats
-    );
+    addSeats(rowDiv, prefix, row, leftColumns, "A".charCodeAt(0), seats);
 
     // Проход/средние места
     if (middleColumns > 0) {
@@ -647,8 +603,7 @@ function renderHorizontalRows(
         row,
         middleColumns,
         "A".charCodeAt(0) + leftColumns,
-        seats,
-        choosedSeats
+        seats
       );
     }
 
@@ -660,8 +615,7 @@ function renderHorizontalRows(
       row,
       rightColumns,
       "A".charCodeAt(0) + leftColumns + middleColumns,
-      seats,
-      choosedSeats
+      seats
     );
 
     rowsContainer.appendChild(rowDiv);
@@ -670,15 +624,7 @@ function renderHorizontalRows(
   return rowsContainer;
 }
 
-function addSeats(
-  rowDiv,
-  prefix,
-  row,
-  numColumns,
-  startCharCode,
-  seats,
-  choosedSeats
-) {
+function addSeats(rowDiv, prefix, row, numColumns, startCharCode, seats) {
   for (let col = 0; col < numColumns; col++) {
     const seatCode = `${prefix}${row}${String.fromCharCode(
       startCharCode + col
@@ -688,16 +634,8 @@ function addSeats(
     const seatDiv = document.createElement("div");
     seatDiv.className = "seat";
     seatDiv.textContent = seatCode;
-
-    if (seat && !seat.available) {
-      // Место занято
-      seatDiv.classList.add("occupied");
-    } else if (choosedSeats.includes(seatCode)) {
-      // Место временно занято (выбрано другим пассажиром)
-      seatDiv.classList.add("choosed");
-    } else {
-      // Место доступно
-      seatDiv.classList.add("available");
+    seatDiv.classList.add(seat && !seat.available ? "occupied" : "available");
+    if (seat && seat.available) {
       seatDiv.addEventListener("click", () =>
         toggleSeatSelection(seatDiv, seatCode)
       );

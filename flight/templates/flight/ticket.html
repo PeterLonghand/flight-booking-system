@@ -119,7 +119,7 @@
             <span style="color: rgb(225, 35, 35); font-weight: bold; font-size: 2.5em;">На взлёт!</span>
         </div>
         <div class="col header" style="width: 50%;">
-            <span style="margin: auto 0 auto auto;">Электронный билет</span>
+            <span style="margin: auto 0 auto auto;">Подтверждение бронирования</span>
         </div>
     </nav>
     <hr style="height: 1px; border: 0; background-color: grey;" noshade>
@@ -128,25 +128,25 @@
             <h3>Важная информация</h3>
             <ul style="padding-left: 50px;">
                 <li>
-                    Это Ваш Электронный билет. Вы должны взять его с собой в аэропорт для регистрации на рейс.
+                    Это Ваше подтверждение о бронировании. Вы должны взять его с собой в аэропорт для регистрации на рейс.
                 </li>
                 <li>
                     Каждому путешествующему пассажиру необходима распечатанная копия этого документа для прохождения регистрации на рейс, досмотра в аэропорту и покупок в дьюти-фри.
                 </li>
                 <li>
-                    Отмена бронирования может быть произведена не позднее 6 (шести) часов до вылета. После совершения отмены бронирования данный билет становится недействителен!
+                    Отмена бронирования может быть произведена не позднее 6 (шести) часов до вылета. После совершения отмены бронирования данный документ становится недействителен!
                 </li>
             </ul>
         </div>
         <div class="table-div">
             <table class="table">
                 <tr class="tr-caption">
-                    <td style="width: 100%;">ДАННЫЕ БИЛЕТА</td>
+                    <td style="width: 100%;">ДАННЫЕ БРОНИРОВАНИЯ</td>
                 </tr>
             </table>
             <table cellspacing='0' >
                 <tr class="tr-odd">
-                    <th>НОМЕР БИЛЕТА</th>
+                    <th>НОМЕР БРОНИРОВАНИЯ</th>
                     <td>{{ticket1.ref_no | upper}}</td>
                     <th>ДАТА И ВРЕМЯ БРОНИРОВАНИЯ</th>
                     <td>{{ticket1.booking_date | date:'d M y' | upper}}<br>{{ticket1.booking_date | time:'H:i' | upper}}</td>
@@ -178,7 +178,7 @@
                     <th>№</th>
                     <th>ФИО ПАССАЖИРА</th>
                     <th>ПОЛ</th>
-                    <th>КЛАСС ОБСЛУЖИВАНИЯ</th>
+                    <th>НОМЕР МЕСТА</th>
                 </tr>
                 {% for passenger in ticket1.passengers.all %}
                     {% if forloop.counter|divisibleby:2 %}
@@ -186,14 +186,14 @@
                             <td style="width: 20%; padding-left: 20px;">{{forloop.counter}}</td>
                             <td style="width: 35%; padding-left: 20px;">{{passenger.last_name | upper}}  {{passenger.first_name | upper}}  {{passenger.patronymic | upper}}</td>
                             <td style="width: 20%; padding-left: 20px;">{{passenger.gender | upper}}</td>
-                            <td style="width: 25%; padding-left: 20px;">{{ticket1.seat_class | upper}}</td>
+                            <td style="width: 25%; padding-left: 20px;">{{passenger.seat.address | upper}} ({{passenger.seat.seat_class.name | upper}})</td>
                         </tr>
                     {% else %}
                         <tr class="tr-even">
                             <td style="width: 20%; padding-left: 20px;">{{forloop.counter}}</td>
                             <td style="width: 35%; padding-left: 20px;">{{passenger.last_name | upper}}  {{passenger.first_name | upper}}  {{passenger.patronymic | upper}}</td>
                             <td style="width: 20%; padding-left: 20px;">{{passenger.gender | upper}}</td>
-                            <td style="width: 25%; padding-left: 20px;">{{ticket1.seat_class | upper}}</td>
+                            <td style="width: 25%; padding-left: 20px;">{{passenger.seat.address | upper}} ({{passenger.seat.seat_class.name | upper}})</td>
                         </tr>
                     {% endif %}
                 {% endfor %}
@@ -251,6 +251,12 @@
                 </tr>
             </table>
             <table cellspacing='0' style="width: 100vw;">
+                
+                
+                
+                
+                
+                
                 <tr class="tr-odd">
                     <th style="width: 35%;">СТОИМОСТЬ</th>
                     <td style="width: 65%;">{{ticket1.flight_fare}} руб.</td>

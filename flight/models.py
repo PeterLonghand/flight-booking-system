@@ -247,6 +247,35 @@ class Flight(models.Model):
 
     def __str__(self):
         return f"{self.origin} to {self.destination}"
+    
+class SeatClass(models.Model):
+    name = models.CharField(max_length=8, null=True)
+
+    def __str__(self):
+        return self.name or "No Seat Class"
+
+
+class Seat(models.Model):
+    available = models.BooleanField(default=True)
+    address = models.CharField(max_length=4, null=True)
+    plane = models.ForeignKey(Plane, on_delete=models.CASCADE, null=True, related_name="seats")
+    seat_class = models.ForeignKey(SeatClass, on_delete=models.CASCADE, null=True)
+
+    def mark_as_occupied(self):
+        """Отметить место как занятое."""
+        self.available = False
+        self.save()
+
+    def mark_as_available(self):
+        """Отметить место как свободное."""
+        self.available = True
+        self.save()
+
+    def __str__(self):
+        plane_info = str(self.plane) if self.plane else "No Plane"
+        seat_class_info = str(self.seat_class) if self.seat_class else "No Seat Class"
+        address_info = self.address if self.address else "No Address"
+        return f"Seat {address_info} in {plane_info} ({seat_class_info})"
 
 class Passenger(models.Model):
     first_name = models.CharField(
@@ -277,6 +306,7 @@ class Passenger(models.Model):
         #null=False,
         verbose_name="Пол"
     )
+    seat=models.ForeignKey(Seat, null=True, default=None, related_name="passengers", on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Пассажир: {self.first_name} {self.last_name}, Пол: {self.gender}"
@@ -327,25 +357,7 @@ class Ticket(models.Model):
 
 
 
-class SeatClass(models.Model):
-    name = models.CharField(max_length=8, null=True)
 
-    def __str__(self):
-        return self.name or "No Seat Class"
-
-
-class Seat(models.Model):
-    available = models.BooleanField(default=True)
-    address = models.CharField(max_length=4, null=True)
-    plane = models.ForeignKey(Plane, on_delete=models.CASCADE, null=True, related_name="seats")
-    passenger = models.ManyToManyField(Passenger, null=True, default=None, related_name="seats")
-    seat_class = models.ForeignKey(SeatClass, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        plane_info = str(self.plane) if self.plane else "No Plane"
-        seat_class_info = str(self.seat_class) if self.seat_class else "No Seat Class"
-        address_info = self.address if self.address else "No Address"
-        return f"Seat {address_info} in {plane_info} ({seat_class_info})"
 
 
 

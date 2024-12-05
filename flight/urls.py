@@ -28,5 +28,13 @@ urlpatterns = [
     path('get-plane-id/<int:flight_id>/', views.get_plane_id, name='get_plane_id'),
     path('get-seat-map/<int:plane_id>/', views.get_seat_map, name='get_seat_map'),
     ##
+
+    ###
+    path('mark-seat-occupied/', views.mark_seat_occupied, name='mark_seat_occupied'),
+    path("mark-seat-available/<str:seat_id>/", views.mark_seat_available, name="mark_seat_available"),
+
+    ###
+
+
     path('about_devs', views.about_devs, name="about_devs")
 ]

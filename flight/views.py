@@ -371,12 +371,21 @@ def book(request):
                 flight2 = Flight.objects.get(id=flight_2)
             passengerscount = request.POST['passengersCount']
             passengers=[]
+            seats=[]
             for i in range(1,int(passengerscount)+1):
                 fname = request.POST[f'passenger{i}FName']
                 lname = request.POST[f'passenger{i}LName']
                 patronymic = request.POST[f'passenger{i}Patronymic']
                 gender = request.POST[f'passenger{i}Gender']
-                passengers.append(Passenger.objects.create(first_name=fname,last_name=lname,patronymic=patronymic,gender=gender.lower()))
+                # START логика бронирования места
+                seat_address=request.POST[f'passenger{i}Seat']     
+                plane_plane = flight1.planeid
+                seat_id = Seat.objects.get(address=seat_address, plane=plane_plane)
+                seat_id.mark_as_occupied()
+                seats.append(seat_id)
+
+                # END логика бронирования места
+                passengers.append(Passenger.objects.create(first_name=fname,last_name=lname,patronymic=patronymic,gender=gender.lower(),seat=seat_id))
             coupon = request.POST.get('coupon')
             
             try:
@@ -589,6 +598,45 @@ def get_plane_id(request, flight_id):
     return JsonResponse({"error": "Plane not assigned to flight"}, status=404)
 
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+@csrf_exempt
+def mark_seat_occupied(request):
+    if request.method == 'POST':
+        try:
+            address = request.GET.get('address')  # Получаем параметр address
+            flight_id = request.GET.get('flight')
+            # Получаем рейс
+            flight = Flight.objects.get(id=flight_id)
+            plane = flight.planeid  # Предположим, что у Flight есть ForeignKey на Plane
+
+            # Находим место по address и plane
+            seat = Seat.objects.get(address=address, plane=plane)
+
+            # Отмечаем место как занятое (например)
+            seat.available = False
+            seat.save()
+
+            return JsonResponse({'status': 'success', 'seat_id': seat.id})
+        except Flight.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Рейс не найден'}, status=404)
+        except Seat.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Место не найдено'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    return JsonResponse({'status': 'error', 'message': 'Неподдерживаемый метод'}, status=405)
+
+@csrf_exempt
+def mark_seat_available(request, seat_id):
+    if request.method == "POST":
+        try:
+            seat = Seat.objects.get(id=seat_id)
+            seat.mark_as_available()
+            return JsonResponse({"success": True})
+        except Seat.DoesNotExist:
+            return JsonResponse({"error": "Seat not found."}, status=404)
+    return JsonResponse({"error": "Invalid request method."}, status=400)
 
 
 
