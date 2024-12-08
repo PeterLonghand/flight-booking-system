@@ -92,8 +92,8 @@ def createticket(user,passengers,passengerscount,flight1,flight_1date,flight_1cl
         ticket.flight_fare = flight1.first_fare*int(passengerscount)
         ffre = flight1.first_fare*int(passengerscount)
     elif flight_1class.lower() == 'business':
-        ticket.flight_fare = flight1.business_fare*int(passengerscount)
-        ffre = flight1.business_fare*int(passengerscount)
+        ticket.flight_fare = flight1.business_seat_cost*int(passengerscount)
+        ffre = flight1.business_seat_cost*int(passengerscount)
     else:
         ticket.flight_fare = flight1.economy_seat_cost*int(passengerscount)
         ffre = flight1.economy_seat_cost*int(passengerscount)

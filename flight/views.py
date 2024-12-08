@@ -9,6 +9,8 @@ import math
 from .models import *
 from capstone.utils import render_to_pdf, createticket
 
+from django.db.models import Exists, OuterRef
+
 
 from django.db.models import Q
 
@@ -226,8 +228,8 @@ def flight(request):
     origin = Place.objects.get(code=o_place.upper())
     print(trip_type, o_place, d_place, departdate, seat)
     if seat == 'economy':
-        flights = Flight.objects.filter(depart_datetime__date=flightday,origin=origin,destination=destination).exclude(economy_seat_cost=0).order_by('economy_seat_cost')
-        #print("урааа")
+        flights = Flight.objects.annotate(has_free_eco_seats=Exists(Seat.objects.filter(plane=OuterRef('planeid'),seat_class__name="Эконом",available=True))).filter(depart_datetime__date=flightday,origin=origin,destination=destination,has_free_eco_seats=True).order_by('economy_seat_cost')#print("урааа")
+        #flights = [flight for flight in flights if flight.has_free_eco_seats]
         print(flights)
         try:
             max_price = flights.last().economy_seat_cost
@@ -249,7 +251,7 @@ def flight(request):
                 min_price2 = 0  ##
          """        
     elif seat == 'business':
-        flights = Flight.objects.filter(depart_datetime__date=flightday,origin=origin,destination=destination).exclude(business_seat_cost=0).order_by('business_seat_cost')
+        flights = Flight.objects.annotate(has_free_bus_seats=Exists(Seat.objects.filter(plane=OuterRef('planeid'),seat_class__name="Бизнес",available=True))).filter(depart_datetime__date=flightday,origin=origin,destination=destination,has_free_bus_seats=True).order_by('business_seat_cost')
         try:
             max_price = flights.last().business_seat_cost
             min_price = flights.first().business_seat_cost

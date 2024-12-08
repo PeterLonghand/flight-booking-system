@@ -203,12 +203,18 @@ class Plane(models.Model):
                         plane=self,
                         seat_class=seat_class
                     )
+    def has_free_eco_seats(self):
+        return Seat.objects.filter(plane=self, seat_class__name="Эконом", available=True).exists()
+
+    def has_free_bus_seats(self):
+        return Seat.objects.filter(plane=self, seat_class__name="Бизнес", available=True).exists()
 
 def default_depart_datetime():
     return datetime(2025, 1, 1, 0, 0)
 
 def default_arrival_datetime():
     return datetime(2025, 1, 2, 0, 0)
+
 
 class Flight(models.Model):
     code = models.CharField(max_length=6, unique=True, null=False, default="AB1234")
@@ -220,7 +226,15 @@ class Flight(models.Model):
     business_seat_cost = models.FloatField(null=False, default=1.0)
     active = models.BooleanField(default=True)
     planeid = models.ForeignKey(Plane, null=True, on_delete=models.CASCADE)
-
+    
+    """ @property
+    def has_free_eco_seats(self):
+        return Seat.objects.filter(plane=self.planeid, seat_class__name="Эконом", available=True).exists()
+     """
+    """ @property
+    def has_free_bus_seats(self):
+        return Seat.objects.filter(plane=self.planeid, seat_class__name="Бизнес", available=True).exists()
+ """
     @property
     def plane_id(self):
         # Получаем id самолета, связанного с этим полетом
