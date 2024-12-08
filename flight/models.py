@@ -21,7 +21,7 @@ class User(AbstractUser):
         null=False,
         default="00000000000",
         validators=[
-            RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')
+            RegexValidator(r'^\+?1?\d{9,15}$', 'Введите корректный номер телефона.')
         ]
     )
     email = models.EmailField(max_length=64, unique=True, null=False)
@@ -39,16 +39,20 @@ class Place(models.Model):
     city = models.CharField(
         max_length=25,
         validators=[
-            RegexValidator(r'^[a-zA-Zа-яА-Я\s\-]{3,25}$', 'Only letters, spaces, and hyphens allowed.')
+            RegexValidator(r'^[a-zA-Zа-яА-Я\s\-]{3,25}$', 'Только буквы, пробелы и дефисы')
         ],
-        null=False
+        null=False,
+        verbose_name="Название города",
+        unique=True
     )
     code = models.CharField(
         max_length=4,
         validators=[
-            RegexValidator(r'^[a-zA-Zа-яА-Я]{3,4}$', 'Only letters allowed.')
+            RegexValidator(r'^[a-zA-Zа-яА-Я]{3,4}$', 'Только буквы')
         ],
-        null=False
+        null=False,
+        
+        verbose_name="Код"
     )
 
     def __str__(self):
@@ -57,24 +61,36 @@ class Place(models.Model):
 
 
 class TransportCompany(models.Model):
-    name = models.CharField(max_length=64, null=False)
+    name = models.CharField(max_length=64, null=False,
+        verbose_name="Название компании")
 
     def __str__(self):
         return self.name
 
 
 class PlaneModel(models.Model):
-    name = models.CharField(max_length=20, null=False)
-    aisles_eco = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(2)])
-    rows_right_eco = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(3)])
-    rows_left_eco = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(3)])
-    rows_middle_eco = models.IntegerField(null=True,validators=[MinValueValidator(0), MaxValueValidator(3)])
-    row_length_eco = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(100)])
-    aisles_bus = models.IntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(2)])
-    rows_left_bus = models.IntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(2)])
-    rows_right_bus = models.IntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(2)])
-    rows_middle_bus = models.IntegerField(null=True,validators=[MinValueValidator(0), MaxValueValidator(2)])
-    row_length_bus = models.IntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(22)])
+    name = models.CharField(max_length=20, null=False, 
+        verbose_name="Название модели")
+    aisles_eco = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(2)], 
+        verbose_name="Проходы в Эконом-классе")
+    rows_right_eco = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(3)], 
+        verbose_name="Ряды в правой части Эконом-класса")
+    rows_left_eco = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(3)], 
+        verbose_name="Ряды в левой части Эконом-класса")
+    rows_middle_eco = models.IntegerField(null=True,validators=[MinValueValidator(0), MaxValueValidator(3)], 
+        verbose_name="Ряды в середине Эконом-класса")
+    row_length_eco = models.IntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(100)], 
+        verbose_name="Длина ряда в Эконом-классе")
+    aisles_bus = models.IntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(2)],
+        verbose_name="Проходы в Бизнес-классе")
+    rows_left_bus = models.IntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(2)], 
+        verbose_name="Ряды в левой части Бизнес-класса")
+    rows_right_bus = models.IntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(2)], 
+        verbose_name="Ряды в правой части Бизнес-класса")
+    rows_middle_bus = models.IntegerField(null=True,validators=[MinValueValidator(0), MaxValueValidator(2)], 
+        verbose_name="Ряды в середине Бизнес-класса")
+    row_length_bus = models.IntegerField(null=True,validators=[MinValueValidator(1), MaxValueValidator(22)], 
+        verbose_name="Длина ряда в Бизнес-классе")
 
 
     @property
@@ -109,9 +125,12 @@ class PlaneModel(models.Model):
 
 
 class Plane(models.Model):
-    name = models.CharField(max_length=20, null=False)
-    transport_company = models.ForeignKey(TransportCompany, on_delete=models.CASCADE)
-    plane_model = models.ForeignKey(PlaneModel, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20, null=False, 
+        verbose_name="Название")
+    transport_company = models.ForeignKey(TransportCompany, on_delete=models.CASCADE, 
+        verbose_name="Авиакомпания")
+    plane_model = models.ForeignKey(PlaneModel, on_delete=models.CASCADE, 
+        verbose_name="Модель")
 
     def __str__(self):
         return self.name

@@ -513,6 +513,8 @@ def cancel_ticket(request):
                 if ticket.user == request.user:
                     ticket.status = 'CANCELLED'
                     ticket.save()
+                    for passenger in ticket.passengers.all():
+                        passenger.seat.mark_as_available()
                     return JsonResponse({'success': True})
                 else:
                     return JsonResponse({

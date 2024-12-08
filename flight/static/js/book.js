@@ -179,6 +179,7 @@ function add_traveller() {
   const flightId = document.querySelector('input[name="flight1"]').value; // Получаем flight.id из hidden input
 
   choosedSeats.push(selectedSeat);
+  selectedSeat = null;
 
   // обновление схемы
   // После добавления пассажира и блокировки места
@@ -494,6 +495,7 @@ function del_traveller(btn) {
   if (indexof > -1) {
     choosedSeats.splice(indexof, 1);
   }
+  selectedSeat = null;
   // обновление схемы
   // После добавления пассажира и блокировки места
   fetch(`/get-plane-id/${flight1Id}/`)
