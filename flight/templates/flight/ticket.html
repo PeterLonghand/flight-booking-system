@@ -65,7 +65,7 @@
         }
     
         .table {
-            margin-top: 25px;
+            margin-top: 5px;
         }
     
         tr {
@@ -256,11 +256,20 @@
                 
                 
                 
-                
-                <tr class="tr-odd">
-                    <th style="width: 35%;">СТОИМОСТЬ</th>
-                    <td style="width: 65%;">{{ticket1.flight_fare}} руб.</td>
-                </tr><!--
+                {% for passenger in ticket1.passengers.all %}
+                    {% if forloop.counter|divisibleby:2 %}
+                    <tr class="tr-odd">
+                        <th style="width: 35%;">Место {{passenger.seat.address}}</th>
+                        <td style="width: 65%;">{{passenger.price}} руб.</td>
+                    </tr>
+                    {% else %}
+                    <tr class="tr-even">
+                        <th style="width: 35%;">Место {{passenger.seat.address}}</th>
+                        <td style="width: 65%;">{{passenger.price}} руб.</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                    <!--
                 <tr class="tr-even">
                     <th style="width: 35%;">CHARGES</th>
                     <td style="width: 65%;">INR {{ticket1.other_charges}}</td>
@@ -271,7 +280,7 @@
                 </tr> -->
                 <tr class="tr-even">
                     <th style="width: 35%;">ВСЕГО</th>
-                    <td style="width: 65%;">{{ticket1.total_fare}} руб.</td>
+                    <td style="width: 65%;">{{ticket1.total_price}} руб.</td>
                 </tr>
             </table>
         </div>

@@ -6,7 +6,6 @@
     <title>Бронирование | На Взлёт!</title>
     <link rel="stylesheet" href="{% static 'css/book_style.css' %}">
     <script type="text/javascript" src="{% static 'js/book.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/seatSelection.js' %}"></script>
 
 {% endblock %}
 
@@ -200,83 +199,27 @@
                         <button class="add-traveller-btn text-uppercase btn"  type="button" data-toggle="collapse" data-target="#collapseExample">+ Новый пассажир</button>
                     </div>
                 </div>
-                <div class="payment-btn" style="background-color: transparent;">
-                    <button type="submit" class="btn btn-primary btn-danger">Перейти к бронированию</button>
-                </div>
+                
                 </div>
                 <div class="col-4">
                     <div class="price-details">
                         <h5>Итого</h5>
                         <hr>
-                        <div class="row base-fare">
-                            <div class="base-fae-label">...: </div>
-                            <div class="base-fare-value">
-                                {% if seat == 'First' %}
-                                    ₽ <span>
-                                        {% if flight2 %}
-                                            {{flight1.first_seat_cost | add:flight2.first_seat_cost}}
-                                        {% else %}
-                                            {{flight1.first_seat_cost}}
-                                        {% endif %}
-                                        </span>
-                                    <input type="hidden" id="basefare" value="{% if flight2 %}{{flight1.first_seat_cost | add:flight2.first_seat_cost}}{% else %}{{flight1.first_seat_cost}}{% endif %}">
-                                {% elif seat == 'Business' %}
-                                    ₽ <span>
-                                        {% if flight2 %}
-                                            {{flight1.business_seat_cost | add:flight2.business_seat_cost}}
-                                        {% else %}
-                                            {{flight1.business_seat_cost}}
-                                        {% endif %}
-                                        </span>
-                                    <input type="hidden" id="basefare" value="{% if flight2 %}{{flight1.business_seat_cost | add:flight2.business_seat_cost}}{% else %}{{flight1.business_seat_cost}}{% endif %}">
-                                {% elif seat == 'Economy' %}
-                                    ₽ <span>
-                                        {% if flight2 %}
-                                            {{flight1.economy_seat_cost | add:flight2.economy_seat_cost}}
-                                        {% else %}
-                                            {{flight1.economy_seat_cost}}
-                                        {% endif %}
-                                    </span>
-                                    <input type="hidden" id="basefare" value="{% if flight2 %}{{flight1.economy_seat_cost | add:flight2.economy_seat_cost}}{% else %}{{flight1.economy_seat_cost}}{% endif %}">
-                                {% endif %}
+                        <div id="row-base-fare" name="row-base-fare" class="base-fareee">
+                            <div id="default-base-fare" name="default-base-fare">
+                                <div class="base-fae-label">Места не выбраны</div>
+                                <div class="base-fare-value"> <span></span></div>
                             </div>
-                        </div>
-                        <div type="hidden" class="row surcharges"><!-- 
-                            <div type="hidden" class="surcharges-label">Fee & Surcharges: </div>
-                            <div type="hidden" class="surcharges-value">₽ <span>{{fee}}</span></div>
-                            <input type="hidden" id="fee" value="{{fee}}"> -->
                         </div>
                         <hr>
-                        <div class="total-fare">
-                            <div class="total-fare-label">Полная стоимость: </div>
-                            <div class="total-fare-value">
-                                {% if seat == 'First' %}
-                                    ₽ <span>
-                                        {% if flight2 %}
-                                            {{flight1.first_seat_cost | add:flight2.first_seat_cost }}
-                                        {% else %}
-                                            {{flight1.first_seat_cost }}
-                                        {% endif %}
-                                    </span>
-                                {% elif seat == 'Business' %}
-                                    ₽ <span>
-                                        {% if flight2 %}
-                                            {{flight1.business_seat_cost | add:flight2.business_seat_cost }}
-                                        {% else %}
-                                            {{flight1.business_seat_cost }}
-                                        {% endif %}
-                                    </span>
-                                {% elif seat == 'Economy' %}
-                                    ₽ <span>
-                                        {% if flight2 %}
-                                            {{flight1.economy_seat_cost | add:flight2.economy_seat_cost }}
-                                        {% else %}
-                                            {{flight1.economy_seat_cost }}
-                                        {% endif %}
-                                        </span>
-                                {% endif %}
-                            </div>
-                        </div>
+                        <div class="row total-fare">
+                            <div class="total-fare-label">Общая стоимость:</div>
+                            <div class="total-fare-value">₽ <span>0</span></div>
+                        </div>                          
+                        
+                    </div>
+                    <div class="payment-btn" style="background-color: transparent;">
+                        <button type="submit" class="btn btn-primary btn-danger">Перейти к бронированию</button>
                     </div>
                     <!-- <div class="coupon-code">
                         <h5>Have a coupon code?</h5>

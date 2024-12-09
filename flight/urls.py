@@ -28,6 +28,8 @@ urlpatterns = [
     path('get-plane-id/<int:flight_id>/', views.get_plane_id, name='get_plane_id'),
     path('get-seat-map/<int:plane_id>/', views.get_seat_map, name='get_seat_map'),
     ##
+    path('get-eco-price/<int:flight_id>/', views.get_eco_price, name='get_eco_price'),
+    path('get-bus-price/<int:flight_id>/', views.get_bus_price, name='get_bus_price'),
 
     ###
     path('mark-seat-occupied/', views.mark_seat_occupied, name='mark_seat_occupied'),

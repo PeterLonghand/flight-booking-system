@@ -340,6 +340,7 @@ class Passenger(models.Model):
         verbose_name="Пол"
     )
     seat=models.ForeignKey(Seat, null=True, default=None, related_name="passengers", on_delete=models.CASCADE)
+    price = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Пассажир: {self.first_name} {self.last_name}, Пол: {self.gender}"
@@ -363,6 +364,7 @@ class Ticket(models.Model):
     passengers = models.ManyToManyField(Passenger, null=True, default=None, related_name="flight_tickets")
     status = models.CharField(max_length=45, choices=TICKET_STATUS, default='PENDING')
     booking_date = models.DateTimeField(default=datetime.now)
+    total_price = models.PositiveIntegerField(default=0)
 
     @property
     def depart_date(self):

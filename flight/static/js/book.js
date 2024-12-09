@@ -1,5 +1,8 @@
 let flight1Id = -1;
-let choosedSeats = []; // Убедитесь, что переменная инициализирована.
+let choosedSeats = [];
+let currentPrices = [];
+let ecoPrice = 0;
+let busPrice = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
   flight_duration();
@@ -39,6 +42,40 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((error) => {
       console.error("Произошла ошибка:", error);
     });
+
+  fetch(`/get-eco-price/${flight1Id}/`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Ошибка при получении эконом-классовой цены");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      ecoPrice = data.eco_seat_cost;
+    })
+    .catch((error) => {
+      console.error(
+        "Произошла ошибка при получении эконом-классовой цены:",
+        error
+      );
+    });
+
+  fetch(`/get-bus-price/${flight1Id}/`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Ошибка при получении бизнес-классовой цены");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      busPrice = data.bus_seat_cost;
+    })
+    .catch((error) => {
+      console.error(
+        "Произошла ошибка при получении бизнес-классовой цены:",
+        error
+      );
+    });
 });
 
 ///
@@ -63,6 +100,21 @@ function handleSeatClick(seatElement) {
   // Выделяем новое место
   seatElement.classList.add("selected");
   selectedSeat = seatElement.dataset.seatId;
+}
+
+function updateBaseFare(seat, price) {
+  // Обновление информации о выбранном месте
+  /* if (seat && price !== undefined) {
+    labelDiv.innerText = `Место: ${seat}`;
+    valueDiv.innerText = price;
+  } else {
+    labelDiv.innerText = "Место:";
+    valueDiv.innerText = "0";
+  } */
+}
+
+function updateTotalFare() {
+  // Обновление общей стоимости
 }
 
 function add_traveller() {
@@ -119,13 +171,51 @@ function add_traveller() {
     ".each-traveller-div .each-traveller"
   ).length;
 
+  let currentPrice = 0;
+
+  //console.log("Selected seat:", selectedSeat);
+  //console.log("Class : ", selectedSeat.charAt(0));
+  if (selectedSeat.charAt(0) == "E") {
+    console.log("я в Е");
+    currentPrices.push(ecoPrice);
+    currentPrice = ecoPrice;
+  } else {
+    console.log("я в Б");
+    currentPrices.push(busPrice);
+    currentPrice = busPrice;
+  }
+  console.log("currentPrices---", currentPrices);
+
+  choosedSeats.push(selectedSeat);
+
+  ///
+  ///
+
+  document.getElementById("default-base-fare").style.display = "none";
+
+  let divprice = document.getElementById("row-base-fare");
+
+  let price_row = `<div class="row base-fare" id="pricediv${selectedSeat}"><div class="base-fae-label">Место ${selectedSeat}</div><div class="base-fare-value">₽ <span>${currentPrice}</span></div></div>`;
+  divprice.innerHTML += price_row;
+
+  let totalValueDiv = document.querySelector(".total-fare-value span");
+  let totalFare = 0;
+  for (let i = 0; i < currentPrices.length; i++) {
+    totalFare += currentPrices[i];
+  }
+  totalValueDiv.innerText = totalFare;
+
+  ///
+  ///
+
   // Добавляем пассажира
   let traveller = `<div class="row each-traveller">
                         <div>
                             <span class="traveller-name">${fname.value} ${
     lname.value
   } ${patronymic.value}</span><span>,</span>
-                            <span class="traveller-gender">${gender_val.toUpperCase()}</span>
+                            <span class="traveller-gender">${gender_val.toUpperCase()}</span><span>,</span>
+                            <span class="traveller-seat">${selectedSeat}</span>
                         </div>
                         <input type="hidden" name="passenger${
                           passengerCount + 1
@@ -142,6 +232,9 @@ function add_traveller() {
                         <input type="hidden" name="passenger${
                           passengerCount + 1
                         }Seat" value="${selectedSeat}">
+                        <input type="hidden" name="passenger${
+                          passengerCount + 1
+                        }Price" value="${currentPrice}">
                         <div class="delete-traveller">
                             <button class="btn" type="button" onclick="del_traveller(this)">
                                 <svg width="1.1em" height="1.1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -168,17 +261,14 @@ function add_traveller() {
 
   // Обновление цен
   let pcount = document.querySelector("#p-count").value;
-  let fare = document.querySelector("#basefare").value;
-  if (parseInt(pcount) !== 0) {
+  //let fare = document.querySelector("#basefare").value;
+  /* if (parseInt(pcount) !== 0) {
     document.querySelector(".base-fare-value span").innerText =
       parseInt(fare) * parseInt(pcount);
     document.querySelector(".total-fare-value span").innerText =
       parseInt(fare) * parseInt(pcount);
-  }
+  } */
 
-  const flightId = document.querySelector('input[name="flight1"]').value; // Получаем flight.id из hidden input
-
-  choosedSeats.push(selectedSeat);
   selectedSeat = null;
 
   // обновление схемы
@@ -471,6 +561,7 @@ function del_traveller(btn) {
   tvl.querySelector(".traveller-head h6 span").innerText = cnt.value;
   if (parseInt(cnt.value) <= 0) {
     tvl.querySelector(".no-traveller").style.display = "block";
+    document.getElementById("default-base-fare").style.display = "block";
   }
   seatCodeCode = traveller.querySelector(
     'input[name^="passenger"][name$="Seat"]'
@@ -479,23 +570,40 @@ function del_traveller(btn) {
   traveller.remove();
 
   let pcount = document.querySelector("#p-count").value;
-  let fare = document.querySelector("#basefare").value;
+  //let fare = document.querySelector("#basefare").value;
   // let fee = document.querySelector("#fee").value;
-  if (parseInt(pcount) !== 0) {
+  /* if (parseInt(pcount) !== 0) {
     document.querySelector(".base-fare-value span").innerText =
       parseInt(fare) * parseInt(pcount);
     document.querySelector(".total-fare-value span").innerText =
       parseInt(fare) * parseInt(pcount);
-  }
+  } */
 
   // Находим индекс элемента seatValue
   let indexof = choosedSeats.indexOf(seatCodeCode);
+  console.log("индексОф", indexof);
 
+  let lastPriceDiv = document.getElementById(`pricediv${seatCodeCode}`);
+  lastPriceDiv.remove();
   // Если элемент найден, удаляем его
   if (indexof > -1) {
     choosedSeats.splice(indexof, 1);
+    currentPrices.splice(indexof, 1);
   }
+
   selectedSeat = null;
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  let totalValueDiv = document.querySelector(".total-fare-value span");
+  let totalFare = 0;
+  for (let i = 0; i < currentPrices.length; i++) {
+    totalFare += currentPrices[i];
+  }
+  totalValueDiv.innerText = totalFare;
   // обновление схемы
   // После добавления пассажира и блокировки места
   fetch(`/get-plane-id/${flight1Id}/`)

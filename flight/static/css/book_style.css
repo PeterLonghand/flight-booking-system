@@ -193,13 +193,17 @@ h5 {
   justify-content: center;
 }
 
+.base-fareee {
+  margin: 13px 10px;
+  font-weight: bold;
+}
 .base-fare,
 .surcharges,
 .other-service,
 .total-fare {
-  margin: 13px 10px;
-  justify-content: space-between;
-  font-weight: bold;
+  margin: 13px 10px !important;
+  justify-content: space-between !important;
+  font-weight: bold !important;
 }
 .base-fare-value,
 .surcharges-value,

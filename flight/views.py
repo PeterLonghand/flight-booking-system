@@ -356,6 +356,7 @@ def book(request):
     if request.method == 'POST':
         print(request.POST)
         if request.user.is_authenticated:
+            totalprice = 0
             flight_1 = request.POST.get('flight1')
             flight_1date = request.POST.get('flight1Date')
             flight_1class = request.POST.get('flight1Class')
@@ -385,14 +386,16 @@ def book(request):
                 seat_id = Seat.objects.get(address=seat_address, plane=plane_plane)
                 seat_id.mark_as_occupied()
                 seats.append(seat_id)
+                price=request.POST[f'passenger{i}Price']
+                totalprice+=int(price)
 
                 # END логика бронирования места
-                passengers.append(Passenger.objects.create(first_name=fname,last_name=lname,patronymic=patronymic,gender=gender.lower(),seat=seat_id))
+                passengers.append(Passenger.objects.create(first_name=fname,last_name=lname,patronymic=patronymic,gender=gender.lower(),seat=seat_id,price=price))
             coupon = request.POST.get('coupon')
             
             try:
                 print("зашёл в try")
-                ticket1 = createticket(request.user,passengers,passengerscount,flight1,flight_1date,flight_1class,coupon,countrycode,email,mobile)
+                ticket1 = createticket(request.user,passengers,passengerscount,flight1,flight_1date,flight_1class,coupon,countrycode,email,mobile,totalprice)
                 if f2:
                     ticket2 = createticket(request.user,passengers,passengerscount,flight2,flight_2date,flight_2class,coupon,countrycode,email,mobile)
                 print("вышел из try")
@@ -417,14 +420,14 @@ def book(request):
 
             if f2:    ##
                 return render(request, "flight/payment.html", { ##
-                    'fare': fare+FEE,   ##
+                    'fare': totalprice,   ##
                     'ticket': ticket1.id,   ##
                     'ticket2': ticket2.id   ##
                 })  ##
             
             print('привет из bookkkk')
             return render(request, "flight/payment.html", {
-                'fare': fare+FEE,
+                'fare': totalprice,
                 'ticket': ticket1.id
             })
         else:
@@ -540,7 +543,7 @@ def resume_booking(request):
             ticket = Ticket.objects.get(ref_no=ref)
             if ticket.user == request.user:
                 return render(request, "flight/payment.html", {
-                    'fare': ticket.total_fare,
+                    'fare': ticket.total_price,
                     'ticket': ticket.id
                 })
             else:
@@ -641,6 +644,20 @@ def mark_seat_available(request, seat_id):
         except Seat.DoesNotExist:
             return JsonResponse({"error": "Seat not found."}, status=404)
     return JsonResponse({"error": "Invalid request method."}, status=400)
+
+def get_eco_price(request, flight_id):
+    print("привет из get_eco_price")
+    flight = Flight.objects.get(id=flight_id)
+    if flight.economy_seat_cost:
+        print(f'eco seat cost: {flight.economy_seat_cost}')
+        return JsonResponse({"eco_seat_cost": flight.economy_seat_cost})
+    return JsonResponse({"error": "Цена отсутствует"}, status=400)
+def get_bus_price(request, flight_id):
+    print(f"айдиииии {flight_id}")
+    flight = Flight.objects.get(id=flight_id)
+    if flight.business_seat_cost:
+        print(f'bus seat cost: {flight.business_seat_cost}')
+        return JsonResponse({"bus_seat_cost": flight.business_seat_cost})
 
 
 

@@ -68,7 +68,7 @@ def render_to_pdf(template_src, context_dict={}):
 
 
 
-def createticket(user,passengers,passengerscount,flight1,flight_1date,flight_1class,coupon,countrycode,email,mobile):
+def createticket(user,passengers,passengerscount,flight1,flight_1date,flight_1class,coupon,countrycode,email,mobile,totalprice):
     ticket = Ticket.objects.create()
     ticket.user = user
     ticket.ref_no = secrets.token_hex(3).upper()
@@ -106,6 +106,7 @@ def createticket(user,passengers,passengerscount,flight1,flight_1date,flight_1cl
     ticket.status = 'PENDING'
     ticket.mobile = ('+'+countrycode+' '+mobile)
     ticket.email = email
+    ticket.total_price=totalprice
     ticket.save()
     #print(ticket.user)
     print(ticket)
