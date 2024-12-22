@@ -195,7 +195,7 @@ function add_traveller() {
 
   let divprice = document.getElementById("row-base-fare");
 
-  let price_row = `<div class="row base-fare" id="pricediv${selectedSeat}"><div class="base-fae-label">Место ${selectedSeat}</div><div class="base-fare-value">₽ <span>${currentPrice}</span></div></div>`;
+  let price_row = `<div class="row base-fare" id="pricediv${selectedSeat}"><div class="base-fae-label">Место ${selectedSeat}</div><div class="base-fare-value"><span>${currentPrice}</span> ₽</div></div>`;
   divprice.innerHTML += price_row;
 
   let totalValueDiv = document.querySelector(".total-fare-value span");
@@ -211,8 +211,8 @@ function add_traveller() {
   // Добавляем пассажира
   let traveller = `<div class="row each-traveller">
                         <div>
-                            <span class="traveller-name">${fname.value} ${
-    lname.value
+                            <span class="traveller-name">${lname.value} ${
+    fname.value
   } ${patronymic.value}</span><span>,</span>
                             <span class="traveller-gender">${gender_val.toUpperCase()}</span><span>,</span>
                             <span class="traveller-seat">${selectedSeat}</span>

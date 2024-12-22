@@ -1,5 +1,9 @@
 .section1 {
-  background-color: rgba(10, 0, 0, 0.05);
+  display: flex;
+  justify-content: center; /* Выравнивание по горизонтали */
+  min-width: 100%; /* Занять всю ширину страницы */
+
+  margin: 0 auto; /* Центрирование */
 }
 .col-8 > div,
 .col-4 > div {
@@ -7,6 +11,7 @@
 }
 
 .col-8 {
+  min-width: 1050px;
   padding: 15px;
 }
 .col-4 {
@@ -38,17 +43,13 @@ h5 {
   border-top: 0.5px solid rgba(0, 0, 0, 0.1);
 }
 .ticket-details-div {
-  margin: 13px 10px;
+  margin: 13px 0px;
 }
 
 .time-details > div {
   text-align: center;
 }
 
-.time-details {
-  margin-right: 25px;
-  margin-left: -25px;
-}
 .brand {
   font-weight: 600;
 }
@@ -309,6 +310,22 @@ h5 {
 
 /* */
 
+.time-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрирование полоски по горизонтали */
+  justify-content: center;
+  margin-left: -55px;
+  margin-right: 55px; /* Уберите margin-right и margin-left */
+  width: auto; /* Ширина контейнера */
+}
+
+.time-details .duration {
+  width: 295px; /* Увеличение ширины полоски */
+  border-bottom: 2px solid #9f9f9f; /* Более заметная линия */
+  margin: 5px 0; /* Отступы сверху и снизу */
+}
+
 @media (max-width: 376px) {
   .container-fluid {
     background-color: rgba(10, 0, 0, 0.05);
@@ -320,9 +337,11 @@ h5 {
     padding-top: 0;
   }
   .main-row {
-    display: block;
+    display: flex;
+    justify-content: center; /* Выравнивание по горизонтали */
     margin-left: 0;
     margin-right: 0;
+    min-width: 90%;
   }
   .main-row > div {
     max-width: 100%;

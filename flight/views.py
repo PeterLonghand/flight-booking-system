@@ -50,6 +50,7 @@ from .models import Place
 
 ###############################################
 def get_places(request, query):
+    update_all_flights_status()
     if query == "all":  # Если запрос 'all', возвращаем все города
         places = Place.objects.all()
     else:
@@ -71,6 +72,7 @@ def get_places(request, query):
 
 
 def index(request):
+    update_all_flights_status()
     min_date = f"{datetime.now().date().year}-{datetime.now().date().month}-{datetime.now().date().day}"
     max_date = f"{datetime.now().date().year if (datetime.now().date().month+3)<=12 else datetime.now().date().year+1}-{(datetime.now().date().month + 3) if (datetime.now().date().month+3)<=12 else (datetime.now().date().month+3-12)}-{datetime.now().date().day}"
     if request.method == 'POST':
@@ -110,6 +112,7 @@ from django.contrib.auth import authenticate, login
 from django.urls import reverse
 
 def login_view(request):
+    update_all_flights_status()
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -159,6 +162,7 @@ def login_view(request):
             return render(request, "flight/login.html")
  """
 def register_view(request):
+    update_all_flights_status()
     if request.method == "POST":
         fname = request.POST['firstname']
         lname = request.POST['lastname']
@@ -193,10 +197,12 @@ def register_view(request):
         return render(request, "flight/register.html")
 
 def logout_view(request):
+    update_all_flights_status()
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
 def query(request, q):
+    update_all_flights_status()
     places = Place.objects.all()
     filters = []
     q = q.lower()
@@ -207,6 +213,7 @@ def query(request, q):
 
 @csrf_exempt
 def flight(request):
+    update_all_flights_status()
     print(request.GET)
     trip_type = request.GET.get('TripType')
     o_place = request.GET.get('Origin')
@@ -228,7 +235,7 @@ def flight(request):
     origin = Place.objects.get(code=o_place.upper())
     print(trip_type, o_place, d_place, departdate, seat)
     if seat == 'economy':
-        flights = Flight.objects.annotate(has_free_eco_seats=Exists(Seat.objects.filter(plane=OuterRef('planeid'),seat_class__name="Эконом",available=True))).filter(depart_datetime__date=flightday,origin=origin,destination=destination,has_free_eco_seats=True).order_by('economy_seat_cost')#print("урааа")
+        flights = Flight.objects.annotate(has_free_eco_seats=Exists(Seat.objects.filter(plane=OuterRef('planeid'),seat_class__name="Эконом",available=True))).filter(depart_datetime__date=flightday,origin=origin,destination=destination,has_free_eco_seats=True,active=True).order_by('economy_seat_cost')#print("урааа")
         #flights = [flight for flight in flights if flight.has_free_eco_seats]
         print(flights)
         try:
@@ -251,7 +258,7 @@ def flight(request):
                 min_price2 = 0  ##
          """        
     elif seat == 'business':
-        flights = Flight.objects.annotate(has_free_bus_seats=Exists(Seat.objects.filter(plane=OuterRef('planeid'),seat_class__name="Бизнес",available=True))).filter(depart_datetime__date=flightday,origin=origin,destination=destination,has_free_bus_seats=True).order_by('business_seat_cost')
+        flights = Flight.objects.annotate(has_free_bus_seats=Exists(Seat.objects.filter(plane=OuterRef('planeid'),seat_class__name="Бизнес",available=True))).filter(depart_datetime__date=flightday,origin=origin,destination=destination,has_free_bus_seats=True,active=True).order_by('business_seat_cost')
         try:
             max_price = flights.last().business_seat_cost
             min_price = flights.first().business_seat_cost
@@ -319,6 +326,7 @@ def flight(request):
     })
 
 def review(request):
+    update_all_flights_status()
     flight_1 = request.GET.get('flight1Id')
     datetime_str = request.GET.get('flight1Datetime')  # Получаем полную строку даты и времени
     seat = request.GET.get('seatClass')
@@ -334,14 +342,6 @@ def review(request):
         # Вычисляем дату прибытия на основе модели
         flight1adate = flight1.arrival_datetime
 
-        flight2 = None
-        flight2ddate = None
-        flight2adate = None
-
-        if round_trip:
-            # Обработка второго рейса (если требуется)
-            pass
-
         return render(request, "flight/book.html", {
             'flight1': flight1,
             "flight1ddate": flight1ddate,
@@ -353,6 +353,7 @@ def review(request):
         return HttpResponseRedirect(reverse("login"))
 
 def book(request):
+    update_all_flights_status()
     if request.method == 'POST':
         print(request.POST)
         if request.user.is_authenticated:
@@ -361,17 +362,18 @@ def book(request):
             flight_1date = request.POST.get('flight1Date')
             flight_1class = request.POST.get('flight1Class')
             f2 = False
+            """ 
             if request.POST.get('flight2'):
                 flight_2 = request.POST.get('flight2')
                 flight_2date = request.POST.get('flight2Date')
                 flight_2class = request.POST.get('flight2Class')
-                f2 = True
+                f2 = True """
             countrycode = request.POST['countryCode']
             mobile = request.POST['mobile']
             email = request.POST['email']
             flight1 = Flight.objects.get(id=flight_1)
-            if f2:
-                flight2 = Flight.objects.get(id=flight_2)
+            """ if f2:
+                flight2 = Flight.objects.get(id=flight_2) """
             passengerscount = request.POST['passengersCount']
             passengers=[]
             seats=[]
@@ -436,6 +438,7 @@ def book(request):
         return HttpResponse("Method must be post.")
 
 def payment(request):
+    update_all_flights_status()
     print('привет из payment')
     if request.user.is_authenticated:
         #if request.method == 'POST':
@@ -477,6 +480,7 @@ def payment(request):
 
 
 def ticket_data(request, ref):
+    update_all_flights_status()
     ticket = Ticket.objects.get(ref_no=ref)
     return JsonResponse({
         'ref': ticket.ref_no,
@@ -488,6 +492,7 @@ def ticket_data(request, ref):
 
 @csrf_exempt
 def get_ticket(request):
+    update_all_flights_status()
     ref = request.GET.get("ref")
     ticket1 = Ticket.objects.get(ref_no=ref)
     data = {
@@ -499,6 +504,7 @@ def get_ticket(request):
 
 
 def bookings(request):
+    update_all_flights_status()
     if request.user.is_authenticated:
         tickets = Ticket.objects.filter(user=request.user).order_by('-booking_date')
         return render(request, 'flight/bookings.html', {
@@ -510,6 +516,7 @@ def bookings(request):
 
 @csrf_exempt
 def cancel_ticket(request):
+    update_all_flights_status()
     if request.method == 'POST':
         if request.user.is_authenticated:
             ref = request.POST['ref']
@@ -537,6 +544,7 @@ def cancel_ticket(request):
         return HttpResponse("Method must be POST.")
 
 def resume_booking(request):
+    update_all_flights_status()
     if request.method == 'POST':
         if request.user.is_authenticated:
             ref = request.POST['ref']
@@ -554,27 +562,34 @@ def resume_booking(request):
         return HttpResponse("Method must be post.")
 
 def contact(request):
+    update_all_flights_status()
     return render(request, 'flight/contact.html')
 
 def privacy_policy(request):
+    update_all_flights_status()
     return render(request, 'flight/privacy-policy.html')
 
 def terms_and_conditions(request):
+    update_all_flights_status()
     return render(request, 'flight/terms.html')
 
 def about_us(request):
+    update_all_flights_status()
     return render(request, 'flight/about.html')
 
 def about_system(request):
+    update_all_flights_status()
     return render(request, 'flight/about_system.html')
 
 def about_devs(request):
+    update_all_flights_status()
     return render(request, 'flight/about_devs.html')
 
 
 ###############################
 
 def get_seat_map(request, plane_id):
+    update_all_flights_status()
     print(f'еееее{plane_id}')
     plane = Plane.objects.get(id=plane_id)
     plane_model = plane.plane_model
@@ -598,6 +613,7 @@ from django.shortcuts import get_object_or_404
 from .models import Flight
 
 def get_plane_id(request, flight_id):
+    update_all_flights_status()
     flight = get_object_or_404(Flight, pk=flight_id)
     if flight.planeid:
         print(f'айдишник: {flight.planeid.id}')
@@ -610,6 +626,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 @csrf_exempt
 def mark_seat_occupied(request):
+    update_all_flights_status()
     if request.method == 'POST':
         try:
             address = request.GET.get('address')  # Получаем параметр address
@@ -636,6 +653,7 @@ def mark_seat_occupied(request):
 
 @csrf_exempt
 def mark_seat_available(request, seat_id):
+    update_all_flights_status()
     if request.method == "POST":
         try:
             seat = Seat.objects.get(id=seat_id)
@@ -646,6 +664,7 @@ def mark_seat_available(request, seat_id):
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
 def get_eco_price(request, flight_id):
+    update_all_flights_status()
     print("привет из get_eco_price")
     flight = Flight.objects.get(id=flight_id)
     if flight.economy_seat_cost:
@@ -653,13 +672,17 @@ def get_eco_price(request, flight_id):
         return JsonResponse({"eco_seat_cost": flight.economy_seat_cost})
     return JsonResponse({"error": "Цена отсутствует"}, status=400)
 def get_bus_price(request, flight_id):
+    update_all_flights_status()
     print(f"айдиииии {flight_id}")
     flight = Flight.objects.get(id=flight_id)
     if flight.business_seat_cost:
         print(f'bus seat cost: {flight.business_seat_cost}')
         return JsonResponse({"bus_seat_cost": flight.business_seat_cost})
 
-
+def update_all_flights_status():
+    flights = Flight.objects.all()
+    for flight in flights:
+        flight.check_and_set_active()
 
 """ from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
