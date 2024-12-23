@@ -266,6 +266,11 @@ class Flight(models.Model):
             #print("\n\nпоставил False")
         else:
             self.active = True
+        if self.arrival_datetime <= datetime.now():
+            self.active = False
+            for seat in self.planeid.seats.all():
+                seat.mark_as_available()
+
         #print(f"\n\n\nя тута{datetime.now() - timedelta(hours=1)}\n\n\n{self.depart_datetime}")
         self.save()
 
@@ -333,6 +338,7 @@ class Flight(models.Model):
                 planeid=self.planeid
             ).exclude(pk=self.pk)  # Все рейсы самолета, кроме текущего
 
+            """
             if previous_flights.exists():
                 # Если есть предыдущие рейсы, проверяем последний прилет
                 matching_flights = previous_flights.filter(
@@ -344,10 +350,12 @@ class Flight(models.Model):
                     raise ValidationError(
                         f"Самолёт '{self.planeid.name}' должен находиться в городе {self.origin.city} перед вылетом, "
                         "но до этого он прилетел в другой город или информация о рейсе отсутствует."
-                    )
+                    ) 
+            
             else:
                 # Первый рейс самолета: проверка пропускается
                 print(f"Первый рейс для самолета '{self.planeid.name}'. Проверка на местоположение пропущена.")
+            """
 
             
     def save(self, *args, **kwargs):
@@ -456,6 +464,7 @@ class Ticket(models.Model):
     status = models.CharField(max_length=45, choices=TICKET_STATUS, default='PENDING')
     booking_date = models.DateTimeField(default=datetime.now)
     total_price = models.PositiveIntegerField(default=0)
+    
 
     @property
     def depart_date(self):

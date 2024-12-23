@@ -516,32 +516,28 @@ def bookings(request):
 
 @csrf_exempt
 def cancel_ticket(request):
-    update_all_flights_status()
-    if request.method == 'POST':
-        if request.user.is_authenticated:
-            ref = request.POST['ref']
-            try:
-                ticket = Ticket.objects.get(ref_no=ref)
-                if ticket.user == request.user:
-                    ticket.status = 'CANCELLED'
-                    ticket.save()
-                    for passenger in ticket.passengers.all():
-                        passenger.seat.mark_as_available()
-                    return JsonResponse({'success': True})
-                else:
-                    return JsonResponse({
-                        'success': False,
-                        'error': "User unauthorised"
-                    })
-            except Exception as e:
+    if request.method == "POST":
+        ref_no = request.POST.get("ref")
+        try:
+            ticket = Ticket.objects.get(ref_no=ref_no)
+            time_to_flight = ticket.flight.depart_datetime - datetime.now()
+            if time_to_flight <= timedelta(hours=6):
+                print("\n\nай ай\n")
                 return JsonResponse({
-                    'success': False,
-                    'error': e
+                    "success": False,
+                    "error": "Бронирование нельзя отменить менее чем за 6 часов до рейса."
                 })
-        else:
-            return HttpResponse("User unauthorised")
-    else:
-        return HttpResponse("Method must be POST.")
+            ticket.status = 'CANCELLED'
+            ticket.save()
+            for passenger in ticket.passengers.all():
+                passenger.seat.mark_as_available()
+            return JsonResponse({'success': True})
+        except Ticket.DoesNotExist:
+            return JsonResponse({
+                "success": False,
+                "error": "Билет не найден."
+            })
+    return JsonResponse({"success": False, "error": "Некорректный запрос."})   
 
 def resume_booking(request):
     update_all_flights_status()

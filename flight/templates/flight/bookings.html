@@ -51,7 +51,7 @@
                                     {% if ticket.status == 'PENDING' %}
                                         <div class="orange">В ОБРАБОТКЕ</div>
                                     {% endif %}
-                                    {% if ticket.status == 'ОТМЕНЕНО' %}
+                                    {% if ticket.status == 'CANCELLED' %}
                                         <div class="red">ОТМЕНЕНО</div>
                                     {% endif %}
                                 </div>
@@ -126,7 +126,7 @@
 
 {% block parentBody %}
     <div class="popup">
-        <div class="small-popup">
+        <div class="small-popup" id="small-popup">
             <div style="margin-bottom: 10px; font-size: 1.1em;"><strong>Вы действительно хотите отменить это бронирование?</strong></div>
             <div class="popup-actions">
                 <button class="btn btn-light" onclick="remove_popup()">Назад</button>
