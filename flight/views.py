@@ -14,6 +14,9 @@ from django.db.models import Exists, OuterRef
 
 from django.db.models import Q
 
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.contrib.auth import update_session_auth_hash
 
 #Fee and Surcharge variable
 from .constant import FEE
@@ -139,7 +142,42 @@ def login_view(request):
     else:
         return render(request, "flight/login.html")
 
+@login_required
+def account_view(request):
+    if request.method == "POST":
+        user = request.user
+        
+        # Update basic information
+        user.firstname = request.POST['firstname']
+        user.surname = request.POST['lastname']
+        user.username = request.POST['username']
+        user.email = request.POST['email']
+        user.patronymic = request.POST.get('patronymic', '')
+        user.phonenumber = request.POST['phonenumber']
+        
+        # Update password if provided
+        password = request.POST.get('password')
+        if password:
+            confirmation = request.POST.get('confirmation')
+            if password != confirmation:
+                return JsonResponse({
+                    "error": "Passwords must match."
+                }, status=400)
+            user.set_password(password)
+        
+        try:
+            user.save()
+            # If password was changed, need to update session
+            if password:
+                update_session_auth_hash(request, user)
+            return render(request, "flight/my_account.html")
 
+        except Exception as e:
+            return JsonResponse({
+                "error": "Error updating profile. Username may be taken."
+            }, status=400)
+    
+    return render(request, "flight/my_account.html")
 
 
 """ def login_view(request):

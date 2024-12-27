@@ -1,0 +1,86 @@
+{% extends "flight/layout2.html" %}
+
+{% load static %}
+
+{% block title %}
+    Мой аккаунт | На Взлёт!
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'js/my_account.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/my_account_style.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="user-box" style="margin-top: 6vh;">
+        <div>
+            <center>
+                <h3>Мой аккаунт</h3><br>
+            </center>
+        </div>
+
+        <form action="{% url 'my_account' %}" method="post" id="account-form" style="width: 100%; margin-bottom: 5vh;">
+            {% csrf_token %}
+        
+            <div class="form-group">
+                <label for="flight-from">Фамилия:</label>
+                <input class="form-control inp lastname" type="text" name="lastname" placeholder="Фамилия *" 
+                       value="{{ user.surname }}" minlength="2" maxlength="36" required disabled>
+                <span class="error-message" style="color: red; display: none;">Фамилия должна содержать от 2 до 36 символов и может включать латиницу и кириллицу.</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="flight-from">Имя:</label>
+                <input class="form-control inp firstname" type="text" name="firstname" placeholder="Имя *" 
+                       value="{{ user.firstname }}" minlength="2" maxlength="36" required disabled>
+                <span class="error-message" style="color: red; display: none;">Имя должно содержать от 2 до 36 символов и может включать латиницу и кириллицу.</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="flight-from">Отчество:</label>
+                <input class="form-control inp patronymic" type="text" name="patronymic" placeholder="Отчество (при наличии)" 
+                       value="{{ user.patronymic }}" minlength="3" maxlength="36" disabled>
+                <span class="error-message" style="color: red; display: none;">Отчество должно содержать от 3 до 36 символов и может включать латиницу и кириллицу.</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="flight-from">Логин:</label>
+                <input class="form-control inp username" type="text" name="username" placeholder="Логин *" 
+                       value="{{ user.username }}" minlength="4" maxlength="36" required disabled>
+                <span class="error-message" style="color: red; display: none;">Логин должен содержать от 4 до 36 символов, включая латиницу, кириллицу, цифры и знак нижнего подчеркивания.</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="flight-from">Номер телефона:</label>
+                <input class="form-control inp phonenumber" type="text" name="phonenumber" placeholder="Номер телефона *" 
+                       value="{{ user.phonenumber }}" minlength="7" maxlength="18" required disabled>
+                <span class="error-message" style="color: red; display: none;">Номер телефона должен содержать от 7 до 18 символов и включать цифры и знак плюса.</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="flight-from">Эл. почта:</label>
+                <input class="form-control inp email" type="email" name="email" placeholder="Эл. почта *" 
+                       value="{{ user.email }}" minlength="5" maxlength="64" required disabled>
+                <span class="error-message" style="color: red; display: none;">Введите корректный адрес электронной почты.</span>
+            </div>
+            
+            <div class="form-group password-group" style="display: none;">
+                <label for="flight-from">Пароль:</label>
+                <input class="form-control inp pswd" type="password" name="password" placeholder="Новый пароль *" 
+                       minlength="4" maxlength="16">
+                <span class="error-message" style="color: red; display: none;">Пароль должен содержать от 4 до 16 символов.</span>
+            </div>
+            
+            <div class="form-group password-group" style="display: none;">
+                <label for="flight-from">Повтор пароля:</label>
+                <input class="form-control inp cpswd" type="password" name="confirmation" placeholder="Повтор пароля *">
+                <span class="error-message" style="color: red; display: none;">Пароли должны совпадать.</span>
+            </div>
+
+            <center>
+                <button type="button" id="edit-button" class="btn btn-primary" style="margin-top: 10px; width: 95%;">Изменить данные</button>
+                <button type="submit" id="save-button" class="btn btn-success" style="margin-top: 10px; width: 95%; display: none;" disabled>Сохранить</button>
+            </center>
+        </form>
+    </div>
+{% endblock %}

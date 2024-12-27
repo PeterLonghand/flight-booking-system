@@ -24,6 +24,7 @@ urlpatterns = [
     #
     path("query/places/<str:query>/", views.get_places, name="get_places"),
     #
+    path('my_account', views.account_view, name='my_account'),
     ##
     path('get-plane-id/<int:flight_id>/', views.get_plane_id, name='get_plane_id'),
     path('get-seat-map/<int:plane_id>/', views.get_seat_map, name='get_seat_map'),

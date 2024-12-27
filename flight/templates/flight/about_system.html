@@ -4,6 +4,258 @@
 
 {% block head %}
     <title>О системе | Flight</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/privacy-policy.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
+    <style>
+        .about-system-container {
+            max-width: 1050px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+        }
+
+        .main-header {
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
+            font-family: Arial, sans-serif;
+            margin: 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin: 30px 0 20px 0;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .feature-description {
+            font-size: 18px;
+            color: #303030;
+            line-height: 1.5;
+        }
+
+        .system-requirements {
+            background-color: #f8f9fa;
+            padding: 15px;
+            color: #303030;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+
+        .page-view {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .page-view img {
+            max-width: 800px;
+            max-height: 500px !important;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        p{
+            color:#303030 !important;
+        }
+    </style>
 {% endblock head %}
+{% block body %}
+<div class="about-system-container">
+    <h1 class="main-header">О системе</h1>
+    
+    <h2 class="section-header">Введение</h2>
+    <div class="system-requirements">
+        <p>Сервис бронирования авиабилетов «На взлёт!» создан для того, чтобы сделать процесс поиска и бронирования билетов на авиарейсы максимально удобным и приятным.</p>
+        <p>Сервис использует систему управления баз данных SQLite.</p>
+        <p><strong>Системные требования:</strong> операционная система -- Windows 7 и новее; браузер -- 64-битный на базе Chromium (например, Google Chrome или Яндекс.Браузер).</p>
+    </div>
+
+    <h2 class="section-header">Работа с системой</h2>
+    <ul class="feature-list">
+        <li class="feature-item">
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Главная страница</div>
+                    <div class="feature-description">На главной странице пользователь может указать пункт отправления искомых рейсов, пункт назначения, желаемый класс обслуживания и дату полёта. Поиск осуществляется нажатием кнопки «Найти рейсы». Если введённые данные некорректны, пользователю выведется сообщение об ошибке, и предоставлена возможность изменить введённые данные, в ином случае пользователь переходит на страницу просмотра списка найденных рейсов. В «шапке» (верхней части) каждой страницы расположено навигационное меню.</div>
+                </div>
+            </div>
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/main_page.png' %}" alt="Главная страница" >
+            </div>            
+        </li>
+
+        <li class="feature-item">            
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Авторизация</div>
+                    <div class="feature-description">Для входа в систему необходимо перейти на страницу авторизации по кнопке «Авторизация» в «шапке». На этой странице пользователь может пройти авторизацию, введя свои учётные данные -- логин и пароль, и нажав на кнопку «Войти». В случае неверно введённых данных будет выведено сообщение об ошибке и предоставлена возможность изменить введённые данные. Если пользователь ещё не зарегистрирован на странице, предусмотрена гиперссылка «Зарегистрируйтесь», открывающая страницу регистрации. Нажатие на логотип «На взлёт» возвращает на главную страницу.</div>
+                </div>
+            </div>
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/login_page.png' %}" alt="Авторизация" >
+            </div>
+        </li>
+
+        <li class="feature-item">            
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Регистрация</div>
+                    <div class="feature-description">На странице регистрации пользователь может зарегистрироваться в системе, введя свои данные и нажав на кнопку «Зарегистрироваться». При правильно введённых данных откроется главная страница, а пользователь будет авторизован. В ином случае будет выведено сообщение об ошибке с указанием правильного формата данных, после чего пользователь сможет исправить введённые данные.</div>
+                </div>
+            </div>
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/register_page.png' %}" alt="Регистрация" >
+            </div>
+        </li>
+
+        <li class="feature-item">
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Просмотр списка рейсов</div>
+                    <div class="feature-description">Пользователь может просматривать список доступных рейсов, соответствующих его запросу, на странице результатов поиска. Здесь пользователь может фильтровать найденные рейсы по цене, времени вылета и времени посадки, сортировать по убыванию и возрастанию цены места. Если пользователь авторизован, он может перейти к странице бронирования, нажав на кнопку «Забронировать», в ином случае откроется страница авторизации.</div>
+                </div>
+            </div>
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/search_page.png' %}" alt="Просмотр списка рейсов">
+            </div>
+        </li>
+
+        <li class="feature-item">
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Бронирование</div>
+                    <div class="feature-description">На странице бронирования представляется детальная информация о рейсе. Пользователь может забронировать место на рейс, указав контактную информацию (телефон и адрес электронной почты), фамилию, имя, отчество и пол пассажира, а также выбрав место на схеме салона самолета. Красным цветом отображаются забронированные другими пользователями места, серым -- места, выбранные в рамках текущего бронирования, зелёным -- свободные (доступные к выбору) места. Для бронирования пользователь может добавить несколько пассажиров. Оформить бронь при правильно введённых данных можно по нажатию кнопки «Перейти к бронированию». Если данные введены неверно, выводится сообщение об ошибке. После оформления брони пользователь увидит страницу подтверждения бронирования. На ней пользователь может загрузить документ о бронировании в формате PDF, нажав на кнопку «Скачать бронь».</div>
+                </div>
+            </div>
+            
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/book_page.png' %}" alt="Бронирование" >
+            </div>
+        </li>
+
+        <li class="feature-item">
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">История бронирований</div>
+                    <div class="feature-description">Все бронирования пользователя можно посмотреть на странице истории бронирований, где показывается информация о рейсах, а также статус бронирования. Пользователь может отменить бронь нажатием кнопки «Отменить», если до вылета рейса осталось более 6 часов, либо загрузить документ о бронировании в формате PDF, нажав кнопку «Скачать».</div>
+                </div>
+            </div>
+            
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/bookings_page.png' %}" alt="История бронирований" >
+            </div>
+        </li>
+
+        <li class="feature-item">            
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Сведения о системе</div>
+                    <div class="feature-description">Пользователь также может открыть страницу «О системе», что Вы уже и совершили. Здесь представлена информация о функциональных возможностях сайта и описаны все ключевые функции системы.</div>
+                </div>
+            </div>
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/about_system_page.png' %}" alt="Сведения о системе" >
+            </div>
+        </li>
+
+        <li class="feature-item">
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Сведения о разработчиках</div>
+                    <div class="feature-description">Посмотреть информацию о команде разработчиков, реализовавших сервис, можно, нажав кнопку «О разработчиках» в «шапке» страницы.</div>
+                </div>
+            </div>
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/about_devs_page.png' %}" alt="Сведения о разработчиках" >
+            </div>
+        </li>
+
+        <li class="feature-item">
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Выход из аккаунта</div>
+                    <div class="feature-description">Выход пользователя из аккаунта осуществляется по нажатию кнопки «Выйти» в выпадающем меню «Мой аккаунт», которое расположено в правой части «шапки» страницы. Также можно перейти на страницу личного кабинета, нажав на кнопку «Личный кабинет».</div>
+                </div>
+            </div>
+            
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/logout_page.png' %}" alt="Выпадающий список" >
+            </div>
+        </li>
+
+        <li class="feature-item">
+            <div class="feature-header">
+                <img src="{% static 'img/icon.png' %}" alt="" class="feature-icon">
+                <div class="feature-content">
+                    <div class="feature-title">Личный кабинет</div>
+                    <div class="feature-description">На странице личного кабинета можно просматривать и редактировать личные данные: имя, фамилию, отчество, номер телефона, электронную почту и пароль. Чтобы появилась возможность изменять данные, необходимо нажать на кнопку «Изменить данные». Если данные введены корректно, по нажатию на кнопку «Сохранить» будет осуществлено сохранение данных и обновление страницы. Иначе будет показано сообщение о некорректности введенных данных.</div>
+                </div>
+            </div>
+            
+            <div class="page-view">
+                <img src="{% static 'img/pages_screens/account_page.png' %}" alt="Мой аккаунт" >
+            </div>
+        </li>
+    </ul>
+</div>
+{% endblock body %}
