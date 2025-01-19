@@ -250,15 +250,15 @@ def default_arrival_datetime():
 
 
 class Flight(models.Model):
-    code = models.CharField(max_length=6, unique=True, null=False, default="AB1234")
-    origin = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="departures")
-    destination = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="arrivals")
-    depart_datetime = models.DateTimeField(null=False, default=default_depart_datetime)
-    arrival_datetime = models.DateTimeField(null=False, default=default_arrival_datetime)
-    economy_seat_cost = models.FloatField(null=False, default=1000.0)
-    business_seat_cost = models.FloatField(null=False, default=2000.0)
-    active = models.BooleanField(default=True)
-    planeid = models.ForeignKey(Plane, null=True, on_delete=models.CASCADE)
+    code = models.CharField(max_length=6, unique=True, null=False, default="AB1234",verbose_name="Код рейса")
+    origin = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="departures",verbose_name="Пункт отправлния")
+    destination = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="arrivals",verbose_name="Пункт назначения")
+    depart_datetime = models.DateTimeField(null=False, default=default_depart_datetime,verbose_name="Время вылета")
+    arrival_datetime = models.DateTimeField(null=False, default=default_arrival_datetime,verbose_name="Время прилета")
+    economy_seat_cost = models.FloatField(null=False, default=1000.0,verbose_name="Стоимость эконом-места")
+    business_seat_cost = models.FloatField(null=False, default=2000.0,verbose_name="Стоимость бизнес-места")
+    active = models.BooleanField(default=True,verbose_name="Действующий")
+    planeid = models.ForeignKey(Plane, null=True, on_delete=models.CASCADE,verbose_name="Самолет")
 
     def check_and_set_active(self):
         if self.depart_datetime <= datetime.now() + timedelta(hours=4):

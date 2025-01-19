@@ -197,11 +197,11 @@
                                             <div class="price-range-output">
                                                 <div class="initial-price-range">
                                                     <span class="currency-symbol">₽</span>
-                                                    <span class="initial-price-value">{{min_price}}</span>
+                                                    <span class="initial-price-value">{{min_price}}₽</span>
                                                 </div>
                                                 <div class="final-price-range">
                                                     <span class="currency-symbol">₽</span>
-                                                    <span class="final-price-value"></span>
+                                                    <span class="final-price-value">₽</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -404,12 +404,12 @@
                                             <div class="flight-details">
                                                 <div class="flight-price">
                                                     <h5>
-                                                        ₽ 
                                                         <span>
                                                             {% if seat == 'Economy' %}{{flight.economy_seat_cost}}{% endif %}
                                                             {% if seat == 'Business' %}{{flight.business_seat_cost}}{% endif %}
                                                             <!-- {% if seat == 'First' %}{{flight.first_fare}}{% endif %} -->
                                                         </span>
+                                                        ₽
                                                     </h5>
                                                 </div>
                                                 <div class="flight-details-btn">
